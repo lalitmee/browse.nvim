@@ -1,11 +1,14 @@
+local utils = require("browse.utils")
+
 local M = {}
 
 M.search_input = function()
-  local input = vim.fn.input("Search String: ")
+  local input = vim.ui.input("Search String: ")
   if input == nil or input == "" then
     return
   end
-  vim.fn.jobstart(string.format("xdg-open 'https://www.google.com/search?q=%s'", input))
+  local open_cmd = utils.get_open_cmd()
+  vim.fn.jobstart(string.format("%s 'https://www.google.com/search?q=%s'", open_cmd, input))
 end
 
 return M

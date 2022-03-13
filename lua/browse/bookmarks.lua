@@ -5,6 +5,8 @@ local actions = require("telescope.actions")
 local themes = require("telescope.themes")
 local action_state = require("telescope.actions.state")
 
+local utils = require("browse.utils")
+
 local M = {}
 
 -- search bookmarks
@@ -22,7 +24,8 @@ M.search_bookmarks = function(config)
       actions.select_default:replace(function()
         actions.close(prompt_bufnr)
         local selection = action_state.get_selected_entry()
-        vim.fn.jobstart(string.format("xdg-open '%s'", selection[1]))
+        local open_cmd = utils.get_open_cmd()
+        vim.fn.jobstart(string.format("%s '%s'", open_cmd, selection[1]))
       end)
       return true
     end,

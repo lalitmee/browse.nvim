@@ -12,11 +12,19 @@
 
 </div>
 
+## Features
+
+- cross platform
+- reduces your search key strokes for any stackoverflow query
+
 ## Requirements
 
 - [neovim](https://github.com/neovim/neovim) (nightly)
-- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
-- xdg-open (linux)
+- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) (if you
+  want to browse bookmarks otherwise no need)
+- [xdg-open](https://linux.die.net/man/1/xdg-open) (linux)
+- [open](https://ss64.com/osx/open.html) (mac)
+- [start](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/start) (windows)
 
 ## Installation
 
@@ -38,11 +46,29 @@
 
 ## Usage
 
-browse.nvim provides a function `browse()`
+`browse.nvim` exposes the following:
+
+- input search
+
+```lua
+require('browse').input_search()
+```
+
+- bookmarks search with the table `bookmarks`
+
+```lua
+require("browse").open_bookmarks({ bookmarks = bookmarks })
+```
+
+- browse which opens `telescope.nvim` dropdown theme to select the method
+
+```lua
+require("browse").browse({ bookmarks = bookmarks })
+```
 
 ### bookmarks
 
-For bookmars you can declare you bookmarks in table format. for example:
+For bookmarks you can declare your bookmarks in lua table format. for example:
 
 ```lua
 local bookmarks = {
@@ -67,9 +93,18 @@ end)
 
 ## Roadmap
 
+I have some plans in my mind:
+
+1. Websites integrations
+
+- devdocs
+- raise an issue if you think we can do something more...
+
+2. tags or file type specific queries
+
 I know there are many things which can be done with this but for now I wanted
 this simple functionality. If you are interested in enhancing this, Pull Requests
-are welcomed.
+are welcome.
 
 ## Acknowledgements
 

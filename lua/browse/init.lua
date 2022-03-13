@@ -6,7 +6,7 @@ local action_state = require("telescope.actions.state")
 local themes = require("telescope.themes")
 
 local search_bookmarks = require("browse.bookmarks").search_bookmarks
-local search_input = require("browse.input").search_input
+local input_search = require("browse.input").search_input
 
 local browse = function(config)
   local bookmarks = config["bookmarks"] or {}
@@ -43,7 +43,7 @@ local browse = function(config)
           return
         end
         if browse_selection == "input" then
-          search_input()
+          input_search()
           return
         end
       end)
@@ -54,4 +54,6 @@ end
 
 return {
   browse = browse,
+  input_search = input_search,
+  open_bookmarks = search_bookmarks,
 }
