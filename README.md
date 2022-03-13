@@ -23,8 +23,8 @@
 
   ```lua
   use({
-  "lalitmee/browse.nvim",
-  requires = { "nvim-telescope/telescope.nvim" },
+    "lalitmee/browse.nvim",
+    requires = { "nvim-telescope/telescope.nvim" },
   })
   ```
 
