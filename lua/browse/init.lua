@@ -3,19 +3,25 @@ local finders = require("telescope.finders")
 local conf = require("telescope.config").values
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
+local themes = require("telescope.themes")
 
 local search_bookmarks = require("browse.bookmarks").search_bookmarks
-local search_ui_input = require("browse.ui_input").search_ui_input
 local search_input = require("browse.input").search_input
 
-local browse = function(opts)
-  opts = opts or {}
+local browse = function(config)
+  local bookmarks = config["bookmarks"] or {}
+  for k, v in pairs(config) do
+    if k == "bookmarks" then
+      bookmarks = v
+    end
+  end
+  local theme = themes.get_dropdown()
+  local opts = vim.tbl_deep_extend("force", config, theme or {})
   pickers.new(opts, {
     prompt_title = "Browse",
     finder = finders.new_table({
       results = {
         { "Bookmarks", "bookmarks" },
-        { "UI", "ui" },
         { "Input", "input" },
       },
       entry_maker = function(entry)
@@ -33,11 +39,7 @@ local browse = function(opts)
         local selection = action_state.get_selected_entry()
         local browse_selection = selection["ordinal"]
         if browse_selection == "bookmarks" then
-          search_bookmarks()
-          return
-        end
-        if browse_selection == "ui" then
-          search_ui_input()
+          search_bookmarks({ bookmarks = bookmarks })
           return
         end
         if browse_selection == "input" then
