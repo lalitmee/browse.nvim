@@ -6,25 +6,7 @@ local action_state = require("telescope.actions.state")
 
 local M = {}
 
-local bookmars = {
-  { "lualine", "https://github.com/hoob3rt/lualine.nvim" },
-  { "neovim", "https://github.com/neovim/neovim" },
-  { "neovim-discource", "https://neovim.discourse.group/" },
-  { "nvim-telescope", "https://github.com/nvim-telescope/telescope.nvim" },
-  { "awesome-neovim", "https://github.com/rockerBOO/awesome-neovim" },
-  { "B2BOrdersWorkflowServer", "https://github.com/koinearth/B2BOrdersWorkflowServer" },
-  { "dNotes", "https://github.com/lalitmee/dNotes" },
-  { "dotfiles", "https://github.com/lalitmee/dotfiles" },
-  { "marketsn-api-service", "https://github.com/koinearth/marketsn-api-service" },
-  { "marketsn-pdf-service", "https://github.com/koinearth/marketsn-pdf-service" },
-  { "marketsn-pwa-service", "https://github.com/koinearth/marketsn-pwa-service" },
-  { "marketsn-webapp-service", "https://github.com/koinearth/marketsn-webapp-service-nextjs" },
-  { "material-ui", "https://material-ui.com/" },
-  { "material-ui-icons", "https://material-ui.com/components/material-icons/#material-icons" },
-  { "my-pull-requests", "https://github.com/pulls" },
-  { "wf-pwa-service", "https://github.com/koinearth/wf-pwa-service" },
-  { "wf-webapp-service", "https://github.com/koinearth/wf-webapp-service" },
-}
+local bookmarks = {}
 
 -- our picker function: colors
 M.search_bookmarks = function(opts)
@@ -32,7 +14,7 @@ M.search_bookmarks = function(opts)
   pickers.new(opts, {
     prompt_title = "Bookmarks",
     finder = finders.new_table({
-      results = bookmars,
+      results = bookmarks,
       entry_maker = function(entry)
         return {
           value = entry,
