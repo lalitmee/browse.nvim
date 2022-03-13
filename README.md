@@ -16,6 +16,7 @@
 
 - [neovim](https://github.com/neovim/neovim) (nightly)
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
+- xdg-open (linux)
 
 ## Installation
 
