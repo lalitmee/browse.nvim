@@ -48,19 +48,19 @@
 
 `browse.nvim` exposes the following:
 
-- input search
+- `input_search()`, it will prompt you to search for something
 
 ```lua
 require('browse').input_search()
 ```
 
-- bookmarks search with the table `bookmarks`
+- `open_bookmarks()`, search with the table `bookmarks`
 
 ```lua
 require("browse").open_bookmarks({ bookmarks = bookmarks })
 ```
 
-- browse which opens `telescope.nvim` dropdown theme to select the method
+- `browse()`, it opens `telescope.nvim` dropdown theme to select the method
 
 ```lua
 require("browse").browse({ bookmarks = bookmarks })
