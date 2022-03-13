@@ -1,12 +1,8 @@
-----------------------------------------------------------------------
--- NOTE: telescope open links {{{
-----------------------------------------------------------------------
 local pickers = require("telescope.pickers")
 local finders = require("telescope.finders")
 local conf = require("telescope.config").values
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
-local themes = require("telescope.themes")
 
 local search_bookmarks = require("browse.bookmarks").search_bookmarks
 local search_ui_input = require("browse.ui_input").search_ui_input
@@ -57,5 +53,3 @@ end
 return {
   browse = browse,
 }
-
--- vim:foldmethod=marker
