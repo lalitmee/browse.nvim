@@ -15,7 +15,7 @@ local search_input = require("browse.input").search_input
 local browse = function(opts)
   opts = opts or {}
   pickers.new(opts, {
-    prompt_title = "Bookmarks",
+    prompt_title = "Browse",
     finder = finders.new_table({
       results = {
         { "Bookmarks", "bookmarks" },
@@ -54,11 +54,8 @@ local browse = function(opts)
   }):find()
 end
 
-lk.command({
-  "Browse",
-  function()
-    browse(themes.get_dropdown())
-  end,
-})
+return {
+  browse = browse,
+}
 
 -- vim:foldmethod=marker
