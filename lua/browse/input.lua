@@ -8,7 +8,9 @@ M.search_input = function()
       return
     end
     local open_cmd = utils.get_open_cmd()
-    vim.fn.jobstart(string.format("%s 'https://www.google.com/search?q=%s'", open_cmd, input))
+    local cmd = open_cmd.." https://www.google.com/search?q="..input
+    vim.cmd(":silent ! "..cmd)
+    -- vim.fn.jobstart(string.format("%s 'https://www.google.com/search?q=%s'", open_cmd, input))
   end)
 end
 
