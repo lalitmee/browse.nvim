@@ -10,8 +10,9 @@ end
 -- get open command
 M.get_open_cmd = function()
   local os_name = M.get_os_name()
+  -- vim.cmd("echo '"..os_name.."'")
   local open_cmd = nil
-  if os_name == "Windows" then
+  if os_name == "Windows_NT" or os_name == "Windows" then
     open_cmd = "start"
   elseif os_name == "Darwin" then
     open_cmd = "open"
