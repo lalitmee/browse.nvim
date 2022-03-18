@@ -25,7 +25,8 @@ M.search_bookmarks = function(config)
         actions.close(prompt_bufnr)
         local selection = action_state.get_selected_entry()
         local open_cmd = utils.get_open_cmd()
-        vim.fn.jobstart(string.format("%s '%s'", open_cmd, selection[1]))
+        local cmd = open_cmd.." "..selection[1]
+        vim.cmd(":silent ! "..cmd)
       end)
       return true
     end,
