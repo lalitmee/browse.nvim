@@ -27,6 +27,7 @@
 - [xdg-open](https://linux.die.net/man/1/xdg-open) (linux)
 - [open](https://ss64.com/osx/open.html) (mac)
 - [start](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/start) (windows)
+- [dressing.nvim](https://github.com/stevearc/dressing.nvim) it will make the inputs and selects pretty (optional)
 
 ## Installation
 
@@ -48,9 +49,9 @@
 
 ## Usage
 
-### Search
+`browse.nvim` exposes the following for:
 
-`browse.nvim` exposes the following:
+### Search
 
 - `input_search()`, it will prompt you to search for something
 
