@@ -2,7 +2,7 @@ local utils = require("browse.utils")
 
 local M = {}
 
-M.devdocs_search = function()
+M.search_with_filetype = function()
   vim.ui.input("Search String: ", function(input)
     if input == nil or input == "" then
       return
@@ -13,7 +13,7 @@ M.devdocs_search = function()
   end)
 end
 
-M.devdocs_search_without_filetype = function()
+M.search = function()
   vim.ui.input("Search String: ", function(input)
     if input == nil or input == "" then
       return

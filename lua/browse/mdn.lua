@@ -2,7 +2,7 @@ local utils = require("browse.utils")
 
 local M = {}
 
-M.mdn_search = function()
+M.search = function()
   vim.ui.input("Search String: ", function(input)
     if input == nil or input == "" then
       return

@@ -7,6 +7,8 @@ local themes = require("telescope.themes")
 
 local search_bookmarks = require("browse.bookmarks").search_bookmarks
 local input_search = require("browse.input").search_input
+local devdocs = require("browse.devdocs")
+local mdn = require("browse.mdn")
 
 local browse = function(config)
   local bookmarks = config["bookmarks"] or {}
@@ -22,7 +24,10 @@ local browse = function(config)
     finder = finders.new_table({
       results = {
         { "Bookmarks", "bookmarks" },
+        { "Devdocs Search", "devdocs" },
+        { "Devdocs Search For Filetype", "devdocs_file" },
         { "Input", "input" },
+        { "MDN", "mdn" },
       },
       entry_maker = function(entry)
         return {
@@ -46,6 +51,18 @@ local browse = function(config)
           input_search()
           return
         end
+        if browse_selection == "devdocs" then
+          devdocs.search()
+          return
+        end
+        if browse_selection == "devdocs_file" then
+          devdocs.search_with_filetype()
+          return
+        end
+        if browse_selection == "mdn" then
+          mdn.search()
+          return
+        end
       end)
       return true
     end,
@@ -56,4 +73,6 @@ return {
   browse = browse,
   input_search = input_search,
   open_bookmarks = search_bookmarks,
+  devdocs = devdocs,
+  mdn = mdn,
 }

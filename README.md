@@ -16,10 +16,12 @@
 
 - cross platform
 - reduces your search key strokes for any stackoverflow query
+- [devdocs](https://devdocs.io) search
+- [MDN](https://developer.mozilla.org/en-US/) search
 
 ## Requirements
 
-- [neovim](https://github.com/neovim/neovim) (nightly)
+- [neovim](https://github.com/neovim/neovim) (0.7.0+)
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) (if you
   want to browse bookmarks otherwise no need)
 - [xdg-open](https://linux.die.net/man/1/xdg-open) (linux)
@@ -46,6 +48,8 @@
 
 ## Usage
 
+### Search
+
 `browse.nvim` exposes the following:
 
 - `input_search()`, it will prompt you to search for something
@@ -66,7 +70,29 @@ require("browse").open_bookmarks({ bookmarks = bookmarks })
 require("browse").browse({ bookmarks = bookmarks })
 ```
 
-### bookmarks
+### devdocs
+
+- `devdocs.search()`, search for anything in the [devdocs](https://devdocs.io/)
+
+```lua
+require('browse.devdocs').search()
+```
+
+- `devdocs.search_with_filetype()`, search for anything for the current file type
+
+```lua
+require('browse.devdocs').search_with_filetype()
+```
+
+### MDN
+
+- `mdn.search()`, search for anything on [MDN](https://developer.mozilla.org/en-US/)
+
+```lua
+require('browse.mdn').search()
+```
+
+## bookmarks
 
 For bookmarks you can declare your bookmarks in lua table format. for example:
 
@@ -91,21 +117,45 @@ end)
 > If this `bookmarks` table will be empty or will not be passed and if you select `Bookmarks`
 > from `telescope` result, you will not see anything in the telescope results.
 
-## Roadmap
+## Advanced usage
 
-I have some plans in my mind:
+Create commands for all the functions which `browse.nvim` exposes and then simply run whatever you want from the
+command line
 
-1. Websites integrations
+```lua
+local browse = require('browse')
 
-- devdocs
-- raise an issue if you think we can do something more...
+function command(name, rhs, opts)
+  opts = opts or {}
+  vim.api.nvim_create_user_command(name, rhs, opts)
+end
 
-2. tags or file type specific queries
+command("BrowseInputSearch", function()
+  browse.input_search()
+end, {})
 
-I know there are many things which can be done with this but for now I wanted
-this simple functionality. If you are interested in enhancing this, Pull Requests
-are welcome.
+command("Browse", function()
+  browse.browse({ bookmarks = bookmarks })
+end, {})
 
-## Acknowledgements
+command("BrowseBookmarks", function()
+  browse.open_bookmarks({ bookmarks = bookmarks })
+end, {})
+
+command("BrowseDevdocsSearch", function()
+  browse.devdocs.search()
+end, {})
+
+command("BrowseDevdocsFiletypeSearch", function()
+  browse.devdocs.search_with_filetype()
+end, {})
+
+command("BrowseMdnSearch", function()
+  browse.mdn.search()
+end, {})
+```
+
+## Acknowledgements and Credits
 
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
+- [open-browser.nvim](https://github.com/tyru/open-browser.vim)
