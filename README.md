@@ -160,3 +160,9 @@ end, {})
 
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [open-browser.nvim](https://github.com/tyru/open-browser.vim)
+
+## Donate
+
+[![](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ilalitmee)
+
+Buy me a drink through [paypal](https://paypal.me/ilalitmee).
