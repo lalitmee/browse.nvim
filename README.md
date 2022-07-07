@@ -165,4 +165,4 @@ end, {})
 
 [![](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ilalitmee)
 
-Buy me a drink through [paypal](https://paypal.me/ilalitmee).
+Buy me a coffee through [paypal](https://paypal.me/ilalitmee).
