@@ -9,6 +9,7 @@ local search_bookmarks = require("browse.bookmarks").search_bookmarks
 local input_search = require("browse.input").search_input
 local devdocs = require("browse.devdocs")
 local mdn = require("browse.mdn")
+local config_setup = require("browse.config")
 
 local browse = function(config)
   local bookmarks = config["bookmarks"] or {}
@@ -75,4 +76,5 @@ return {
   open_bookmarks = search_bookmarks,
   devdocs = devdocs,
   mdn = mdn,
+  setup = config_setup.setup,
 }

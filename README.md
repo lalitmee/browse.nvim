@@ -118,6 +118,22 @@ end)
 > If this `bookmarks` table will be empty or will not be passed and if you select `Bookmarks`
 > from `telescope` result, you will not see anything in the telescope results.
 
+## Customizations
+
+You can customize the `input_search()` to use the `provider` you like. Possible values for the provider are following:
+
+- `google`
+- `duckduckgo`
+- `brave`
+- `bing`
+
+```lua
+require('browse').setup({
+  -- search provider you want to use
+  provider = "google", -- default
+})
+```
+
 ## Advanced usage
 
 Create commands for all the functions which `browse.nvim` exposes and then simply run whatever you want from the
