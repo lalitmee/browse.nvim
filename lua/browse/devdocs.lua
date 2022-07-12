@@ -9,7 +9,11 @@ M.search_with_filetype = function()
     end
     local open_cmd = utils.get_open_cmd()
     local input_with_filetype = vim.bo.filetype .. " " .. input
-    vim.fn.jobstart(string.format("%s 'https://devdocs.io/#q=%s'", open_cmd, input_with_filetype))
+    local url = string.format('https://devdocs.io/#q=%s', input_with_filetype)
+    if utils.is_mac_os() then
+      url = utils.urlencode(url)
+    end
+    vim.fn.jobstart(string.format("%s %s", open_cmd, url))
   end)
 end
 
@@ -19,7 +23,11 @@ M.search = function()
       return
     end
     local open_cmd = utils.get_open_cmd()
-    vim.fn.jobstart(string.format("%s 'https://devdocs.io/#q=%s'", open_cmd, input))
+    local url = string.format('https://devdocs.io/#q=%s', input)
+    if utils.is_mac_os() then
+      url = utils.urlencode(url)
+    end
+    vim.fn.jobstart(string.format("%s %s", open_cmd, url))
   end)
 end
 
