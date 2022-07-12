@@ -27,7 +27,7 @@ M.get_open_cmd = function()
   if os_name == "Windows_NT" or os_name == "Windows" then
     open_cmd = "start"
   elseif os_name == "Darwin" then
-    open_cmd = "open -u"
+    open_cmd = "open"
   else
     open_cmd = "xdg-open"
   end
