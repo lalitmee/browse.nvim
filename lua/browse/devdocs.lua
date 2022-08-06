@@ -1,26 +1,13 @@
-local utils = require("browse.utils")
+local browser = require("browse.browser")
 
 local M = {}
 
-M.search_with_filetype = function()
-  vim.ui.input("Search String: ", function(input)
-    if input == nil or input == "" then
-      return
-    end
-    local open_cmd = utils.get_open_cmd()
-    local input_with_filetype = vim.bo.filetype .. " " .. input
-    vim.fn.jobstart(string.format("%s 'https://devdocs.io/#q=%s'", open_cmd, input_with_filetype))
-  end)
-end
+M.search_with_filetype = browser.generic_search_custom(function(input)
+	local input_with_filetype = vim.bo.filetype .. " " .. input
 
-M.search = function()
-  vim.ui.input("Search String: ", function(input)
-    if input == nil or input == "" then
-      return
-    end
-    local open_cmd = utils.get_open_cmd()
-    vim.fn.jobstart(string.format("%s 'https://devdocs.io/#q=%s'", open_cmd, input))
-  end)
-end
+	return string.format("https://devdocs.io/#q=%s", input_with_filetype)
+end)
+
+M.search = browser.generic_search_for("https://devdocs.io/#q=%s")
 
 return M
