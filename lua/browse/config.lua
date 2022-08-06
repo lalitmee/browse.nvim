@@ -4,10 +4,10 @@ local defaults = {
   provider = "google",
 }
 
-M.options = {}
+M.options = defaults
 
 function M.setup(opts)
-  M.options = vim.tbl_deep_extend("force", {}, defaults, opts or {})
+  M.options = vim.tbl_extend('keep', defaults, opts or {})
 end
 
 return M
