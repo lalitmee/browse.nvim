@@ -12,16 +12,21 @@ local mdn = require("browse.mdn")
 local config_setup = require("browse.config")
 
 local browse = function(config)
+	local config = config or {}
   local bookmarks = config["bookmarks"] or {}
+
   for k, v in pairs(config) do
     if k == "bookmarks" then
       bookmarks = v
     end
   end
+
   local theme = themes.get_dropdown()
   local opts = vim.tbl_deep_extend("force", config, theme or {})
+
   pickers.new(opts, {
     prompt_title = "Browse",
+
     finder = finders.new_table({
       results = {
         { "Bookmarks", "bookmarks" },
@@ -38,31 +43,26 @@ local browse = function(config)
         }
       end,
     }),
+
     sorter = conf.generic_sorter(opts),
+
     attach_mappings = function(prompt_bufnr, _)
       actions.select_default:replace(function()
         actions.close(prompt_bufnr)
+
         local selection = action_state.get_selected_entry()
         local browse_selection = selection["ordinal"]
+
         if browse_selection == "bookmarks" then
           search_bookmarks({ bookmarks = bookmarks })
-          return
-        end
-        if browse_selection == "input" then
+				elseif browse_selection == "input" then
           input_search()
-          return
-        end
-        if browse_selection == "devdocs" then
+				elseif browse_selection == "devdocs" then
           devdocs.search()
-          return
-        end
-        if browse_selection == "devdocs_file" then
+				elseif browse_selection == "devdocs_file" then
           devdocs.search_with_filetype()
-          return
-        end
-        if browse_selection == "mdn" then
+				elseif browse_selection == "mdn" then
           mdn.search()
-          return
         end
       end)
       return true
