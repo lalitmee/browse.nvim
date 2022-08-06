@@ -59,7 +59,7 @@ M.generic_search = function(target_fn)
     if input == nil or input == "" then
       return
     end
-		
+
 		local sane_input = escape_target(vim.fn.trim(input))
 		M.plain_search(target_fn(sane_input))
   end)
@@ -75,7 +75,7 @@ end
 -- a generic searching for a format
 M.generic_search_for = function(format)
 	return function()
-		M.generic_search(function(input) 
+		M.generic_search(function(input)
 			return string.format(format, input)
 		end)
 	end
