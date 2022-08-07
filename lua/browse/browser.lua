@@ -24,33 +24,33 @@ end
 
 -- start the browser job
 local start_browser_for = function(target)
-	local target = vim.fn.trim(target)
-	local open_cmd = vim.fn.extend(get_open_cmd(), { target })
+  local target = vim.fn.trim(target)
+  local open_cmd = vim.fn.extend(get_open_cmd(), { target })
 
-	vim.fn.jobstart(open_cmd, { detach = true })
+  vim.fn.jobstart(open_cmd, { detach = true })
 end
 
 local escape_target = function(target)
-	local escapes = {
-		[" "] = "%20", ["<"] = "%3C",
-		[">"] = "%3E", ["#"] = "%23",
-		["%"] = "%25", ["+"] = "%2B",
-		["{"] = "%7B", ["}"] = "%7D",
-		["|"] = "%7C", ["\\"] = "%5C",
-		["^"] = "%5E", ["~"] = "%7E",
-		["["] = "%5B", ["]"] = "%5D",
-		["‘"] = "%60", [";"] = "%3B",
-		["/"] = "%2F", ["?"] = "%3F",
-		[":"] = "%3A", ["@"] = "%40",
-		["="] = "%3D", ["&"] = "%26",
-		["$"] = "%24"
-	}
+  local escapes = {
+    [" "] = "%20", ["<"] = "%3C",
+    [">"] = "%3E", ["#"] = "%23",
+    ["%"] = "%25", ["+"] = "%2B",
+    ["{"] = "%7B", ["}"] = "%7D",
+    ["|"] = "%7C", ["\\"] = "%5C",
+    ["^"] = "%5E", ["~"] = "%7E",
+    ["["] = "%5B", ["]"] = "%5D",
+    ["‘"] = "%60", [";"] = "%3B",
+    ["/"] = "%2F", ["?"] = "%3F",
+    [":"] = "%3A", ["@"] = "%40",
+    ["="] = "%3D", ["&"] = "%26",
+    ["$"] = "%24",
+  }
 
-	return target:gsub('.', escapes)
+  return target:gsub(".", escapes)
 end
 
 M.plain_search = function(input)
-	start_browser_for(input)
+  start_browser_for(input)
 end
 
 -- a generic searching function used everywhere
@@ -60,25 +60,25 @@ M.generic_search = function(target_fn)
       return
     end
 
-		local sane_input = escape_target(vim.fn.trim(input))
-		M.plain_search(target_fn(sane_input))
+    local sane_input = escape_target(vim.fn.trim(input))
+    M.plain_search(target_fn(sane_input))
   end)
 end
 
 -- a generic searching closure util
 M.generic_search_custom = function(custom_fn)
-	return function()
-		M.generic_search(custom_fn)
-	end
+  return function()
+    M.generic_search(custom_fn)
+  end
 end
 
 -- a generic searching for a format
 M.generic_search_for = function(format)
-	return function()
-		M.generic_search(function(input)
-			return string.format(format, input)
-		end)
-	end
+  return function()
+    M.generic_search(function(input)
+      return string.format(format, input)
+    end)
+  end
 end
 
 return M
