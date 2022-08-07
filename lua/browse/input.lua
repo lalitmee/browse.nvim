@@ -1,11 +1,11 @@
-local browser = require("browse.browser")
+local utils = require("browse.utils")
 local config = require("browse.config")
 
 local fmt = string.format
 
 local M = {}
 
-M.search_input = browser.generic_search_custom(function(input)
+M.search_input = utils.generic_search_custom(function(input)
   local provider = config.options.provider
   local path = fmt("https://%s.com/search?q=%s", provider, input)
 
