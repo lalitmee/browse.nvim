@@ -5,7 +5,7 @@ local actions = require("telescope.actions")
 local themes = require("telescope.themes")
 local action_state = require("telescope.actions.state")
 
-local browser = require("browse.browser")
+local utils = require("browse.utils")
 
 local M = {}
 
@@ -33,7 +33,7 @@ M.search_bookmarks = function(config)
             return
           end
 
-          browser.plain_search(selection[1])
+          utils.plain_search(selection[1])
         end)
         return true
       end,
