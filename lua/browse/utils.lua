@@ -22,14 +22,6 @@ local get_open_cmd = function()
   return open_cmd
 end
 
--- start the browser job
-local start_browser_for = function(target)
-  local target = vim.fn.trim(target)
-  local open_cmd = vim.fn.extend(get_open_cmd(), { target })
-
-  vim.fn.jobstart(open_cmd, { detach = true })
-end
-
 local escape_target = function(target)
   local escapes = {
     [" "] = "%20", ["<"] = "%3C",
@@ -49,33 +41,41 @@ local escape_target = function(target)
   return target:gsub(".", escapes)
 end
 
-M.plain_search = function(input)
-  start_browser_for(input)
+-- start the browser job
+local open_browser = function(target)
+  local target = vim.fn.trim(target)
+  local open_cmd = vim.fn.extend(get_open_cmd(), { target })
+
+  vim.fn.jobstart(open_cmd, { detach = true })
+end
+
+M.default_search = function(input)
+  open_browser(input)
 end
 
 -- a generic searching function used everywhere
-M.generic_search = function(target_fn)
+M.search = function(target_fn)
   vim.ui.input("Search String: ", function(input)
     if input == nil or input == "" then
       return
     end
 
-    local sane_input = escape_target(vim.fn.trim(input))
-    M.plain_search(target_fn(sane_input))
+    local escaped_input = escape_target(vim.fn.trim(input))
+    M.default_search(target_fn(escaped_input))
   end)
 end
 
 -- a generic searching closure util
-M.generic_search_custom = function(custom_fn)
+M.callback_search = function(custom_fn)
   return function()
-    M.generic_search(custom_fn)
+    M.search(custom_fn)
   end
 end
 
 -- a generic searching for a format
-M.generic_search_for = function(format)
+M.format_search = function(format)
   return function()
-    M.generic_search(function(input)
+    M.search(function(input)
       return string.format(format, input)
     end)
   end

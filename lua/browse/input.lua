@@ -5,7 +5,7 @@ local fmt = string.format
 
 local M = {}
 
-M.search_input = utils.generic_search_custom(function(input)
+M.search_input = utils.callback_search(function(input)
   local provider = config.options.provider
   local path = fmt("https://%s.com/search?q=%s", provider, input)
 

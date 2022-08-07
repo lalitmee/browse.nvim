@@ -33,7 +33,7 @@ M.search_bookmarks = function(config)
             return
           end
 
-          utils.plain_search(selection[1])
+          utils.default_search(selection[1])
         end)
         return true
       end,
