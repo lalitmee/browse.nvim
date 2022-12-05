@@ -107,6 +107,15 @@ local bookmarks = {
 }
 ```
 
+Bookmarks can be given aliases like so:
+
+```lua
+local aliases = {
+  ["neovim/neovim"] = "https://github.com/neovim/neovim",
+}
+```
+The bookmark can then be inputted as `neovim/neovim`.
+
 and then pass this table into the `browse()` function like this
 
 ```lua
