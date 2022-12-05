@@ -10,11 +10,16 @@ local utils = require("browse.utils")
 local M = {}
 
 -- search bookmarks
-M.search_bookmarks = function(config)
-  local bookmarks = config["bookmarks"] or {}
+M.search_bookmarks = function(config, folder, pre_folders)
+  local bookmarks = config["bookmarks"][folder] or config["bookmarks"] or {}
   local theme = themes.get_dropdown()
   local opts = vim.tbl_deep_extend("force", config, theme or {})
 
+  -- Add an entry to the top of folders to go up the directory
+  if folder and bookmarks[1] ~= ".." then
+    table.insert(bookmarks, 1, "..")
+  end
+  
   pickers
     .new(opts, {
       prompt_title = "Bookmarks",
@@ -32,8 +37,33 @@ M.search_bookmarks = function(config)
           if not selection then
             return
           end
-
-          utils.default_search(selection[1])
+            
+          -- Folders must begin with a "/"
+          -- I'm sure there is another way to differentiate
+          -- between folders and URLs but this was the simplest
+          -- solution I have found.
+          if selection[1]:sub(1, 1) ~= "/" and selection[1] ~= ".." then
+            utils.default_search(selection[1])
+            return
+          end
+            
+          if folder then
+            if selection[1] == ".." then
+              if pre_folders then 
+                local prev_folder = table.remove(pre_folders)
+                M.search_bookmarks(config, prev_folder, pre_folders)
+                return
+              end
+              M.search_bookmarks(config)
+              return
+            end
+            pre_folders = pre_folders or {}
+            table.insert(pre_folders, folder)  
+            M.search_bookmarks(config, selection[1], pre_folders)
+            return
+          end
+            
+          M.search_bookmarks(config, selection[1])
         end)
         return true
       end,
