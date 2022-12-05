@@ -106,6 +106,28 @@ local bookmarks = {
   "https://github.com/rockerBOO/awesome-neovim",
 }
 ```
+Folders can be specified as so:
+
+```lua
+local bookmarks = {
+  "/github",
+  "/.nvim",
+  "https://neovim.discourse.group/",
+  
+  ["/github"] = {
+    "/.nvim",
+    "https://github.com/neovim/neovim",
+    "https://github.com/rockerBOO/awesome-neovim" },
+  
+  ["/.nvim"] = {
+    "https://github.com/hoob3rt/lualine.nvim",
+    "https://github.com/nvim-telescope/telescope.nvim" },
+}
+```
+
+> Folders must begin with a `/`. 
+> A `".."` option will be added to move up the directory.
+> You must put all folder declarations AFTER the first bookmarks or they will not appear.
 
 and then pass this table into the `browse()` function like this
 
