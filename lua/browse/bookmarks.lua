@@ -12,6 +12,7 @@ local M = {}
 -- search bookmarks
 M.search_bookmarks = function(config)
   local bookmarks = config["bookmarks"] or {}
+  local aliases = config["aliases"] or {}
   local theme = themes.get_dropdown()
   local opts = vim.tbl_deep_extend("force", config, theme or {})
 
@@ -32,8 +33,10 @@ M.search_bookmarks = function(config)
           if not selection then
             return
           end
+            
+          selection = aliases[selection[1]] or selection[1]
 
-          utils.default_search(selection[1])
+          utils.default_search(selection)
         end)
         return true
       end,
