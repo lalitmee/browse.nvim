@@ -120,7 +120,7 @@ and then pass this table into the `browse()` function like this
 
 ```lua
 vim.keymap.set("n", "<leader>b", function()
-  require("browse").browse({ bookmarks = bookmarks })
+  require("browse").browse({ bookmarks = bookmarks, aliases = aliases})
 end)
 ```
 
