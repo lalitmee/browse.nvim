@@ -16,11 +16,38 @@ M.search_bookmarks = function(config)
   local theme = themes.get_dropdown()
   local opts = vim.tbl_deep_extend("force", config, theme or {})
 
+  local search = {}
+  
+  for k, v in pairs(bookmarks) do
+    if type(k) == "string" then
+      table.insert(search, {k, v})
+    else
+      table.insert(search, v)
+    end
+  end
+  
   pickers
     .new(opts, {
       prompt_title = "Bookmarks",
       finder = finders.new_table({
         results = bookmarks,
+        entry_maker = function(entry)
+          -- Entry is a URL
+          if type(entry) == "string" then
+            return {
+              value = entry,
+              display = entry,
+              ordinal = entry,
+            }
+          end
+          
+          -- Entry is an alias
+          return {
+            value = entry,
+            display = entry[1],
+            ordinal = entry[2],
+          }
+        end,
       }),
 
       sorter = conf.generic_sorter(opts),
@@ -34,9 +61,7 @@ M.search_bookmarks = function(config)
             return
           end
             
-          selection = aliases[selection[1]] or selection[1]
-
-          utils.default_search(selection)
+          utils.default_search(selection["ordinal"])
         end)
         return true
       end,
