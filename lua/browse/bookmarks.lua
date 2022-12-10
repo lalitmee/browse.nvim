@@ -33,7 +33,7 @@ M.search_bookmarks = function(config, folder, prev_dirs)
     .new(opts, {
       prompt_title = "Bookmarks",
       finder = finders.new_table({
-        results = bookmarks,
+        results = search,
         entry_maker = function(entry)
           -- Entry is a URL
           if type(entry) == "string" then
