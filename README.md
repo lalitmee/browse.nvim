@@ -107,26 +107,11 @@ local bookmarks = {
 }
 ```
 
-Bookmarks can also contain folders and aliases like so:
-
-```lua
-local bookmarks = {
-  ["neovim"] = "https://neovim.discourse.group/",
-  ["github"] = { ["neovim"] = "https://github.com/neovim/neovim",
-                 "https://github.com/rockerBOO/awesome-neovim",
-                 [".nvim"] = { ["lualine"] = "https://github.com/hoob3rt/lualine.nvim",
-                               ["telescope"] = "https://github.com/nvim-telescope/telescope.nvim",
-                             },
-               },
-}
-```
-The bookmark can then be inputted as `neovim/neovim`.
-
 and then pass this table into the `browse()` function like this
 
 ```lua
 vim.keymap.set("n", "<leader>b", function()
-  require("browse").browse({ bookmarks = bookmarks, aliases = aliases})
+  require("browse").browse({ bookmarks = bookmarks })
 end)
 ```
 
