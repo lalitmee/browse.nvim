@@ -10,8 +10,8 @@ local utils = require("browse.utils")
 local M = {}
 
 -- search bookmarks
-M.search_bookmarks = function(config)
-  local bookmarks = config["bookmarks"] or {}
+M.search_bookmarks = function(config, folder, prev_dirs)
+  local bookmarks = folder or config["bookmarks"] or {}
   local theme = themes.get_dropdown()
   local opts = vim.tbl_deep_extend("force", config, theme or {})
 
