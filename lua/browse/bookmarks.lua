@@ -18,6 +18,10 @@ M.search_bookmarks = function(config)
 
   local search = {}
   
+  if folder then
+    table.insert(search, "..")
+  end
+  
   for k, v in pairs(bookmarks) do
     if type(k) == "string" then
       table.insert(search, {k, v})
@@ -42,10 +46,19 @@ M.search_bookmarks = function(config)
           end
           
           -- Entry is an alias
+          if type(entry[2]) == "string" then
+            return {
+              value = entry,
+              display = entry[1],
+              ordinal = entry[2],
+            }
+          end
+            
+          -- Entry is a folder
           return {
-            value = entry,
-            display = entry[1],
-            ordinal = entry[2],
+              value = entry,
+              display = entry[1],
+              ordinal = entry[1],
           }
         end,
       }),
@@ -58,6 +71,19 @@ M.search_bookmarks = function(config)
           local selection = action_state.get_selected_entry()
 
           if not selection then
+            return
+          end
+            
+          if selection["ordinal"] == ".." then
+            local dir = table.remove(prev_dirs, 1)
+            M.search_bookmarks(config, dir, prev_dirs)
+            return
+          end
+            
+          if bookmarks[selection["ordinal"]] then
+            prev_dirs = prev_dirs or {}
+            table.insert(prev_dirs, folder)
+            M.search_bookmarks(config, bookmarks[selection["ordinal"]], prev_dirs)
             return
           end
             
