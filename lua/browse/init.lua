@@ -9,17 +9,12 @@ local search_bookmarks = require("browse.bookmarks").search_bookmarks
 local input_search = require("browse.input").search_input
 local devdocs = require("browse.devdocs")
 local mdn = require("browse.mdn")
-local config_setup = require("browse.config")
+local defaults = require("browse.config")
 
 local browse = function(config)
     config = config or {}
-    local bookmarks = config["bookmarks"] or {}
 
-    for k, v in pairs(config) do
-        if k == "bookmarks" then
-            bookmarks = v
-        end
-    end
+    local bookmarks = config["bookmarks"] or defaults.opts["bookmarks"] or {}
 
     local theme = themes.get_dropdown()
     local opts = vim.tbl_deep_extend("force", config, theme or {})
@@ -30,11 +25,11 @@ local browse = function(config)
 
             finder = finders.new_table({
                 results = {
-                    { "Bookmarks", "bookmarks" },
+                    { "Bookmarks Search", "bookmarks" },
                     { "Devdocs Search", "devdocs" },
-                    { "Devdocs Search For Filetype", "devdocs_file" },
-                    { "Input", "input" },
-                    { "MDN", "mdn" },
+                    { "Devdocs Search with filetype", "devdocs_file" },
+                    { "Input Search", "input" },
+                    { "MDN Web Docs", "mdn" },
                 },
                 entry_maker = function(entry)
                     return {
@@ -55,7 +50,7 @@ local browse = function(config)
                     local browse_selection = selection["ordinal"]
 
                     if browse_selection == "bookmarks" then
-                        search_bookmarks({ bookmarks = bookmarks })
+                        search_bookmarks({ bookmarks })
                     elseif browse_selection == "input" then
                         input_search()
                     elseif browse_selection == "devdocs" then
@@ -78,5 +73,5 @@ return {
     open_bookmarks = search_bookmarks,
     devdocs = devdocs,
     mdn = mdn,
-    setup = config_setup.setup,
+    setup = defaults.setup,
 }

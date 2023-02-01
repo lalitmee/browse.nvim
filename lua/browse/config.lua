@@ -1,10 +1,16 @@
 local M = {}
 
-local defaults = {
+M.opts = {
     provider = "google",
-}
+    bookmarks = {
+        -- -- urls
+        -- "https://github.com/lalitmee/browse.nvim",
 
-M.opts = defaults
+        -- -- aliases
+        -- ["github_code_search"] = "https://github.com/search?q=%s&type=code",
+        -- ["github_repo_search"] = "https://github.com/search?q=%s&type=respositories",
+    },
+}
 
 function M.setup(opts)
     opts = opts or {}

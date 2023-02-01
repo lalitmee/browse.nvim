@@ -54,7 +54,7 @@ end
 
 -- start the browser job
 local open_browser = function(target)
-    local target = vim.fn.trim(target)
+    target = vim.fn.trim(target)
     local open_cmd = vim.fn.extend(get_open_cmd(), { target })
 
     vim.fn.jobstart(open_cmd, { detach = true })
