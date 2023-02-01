@@ -99,11 +99,23 @@ For bookmarks you can declare your bookmarks in lua table format. for example:
 
 ```lua
 local bookmarks = {
+  -- direct urls as bookmarks
   "https://github.com/hoob3rt/lualine.nvim",
   "https://github.com/neovim/neovim",
   "https://neovim.discourse.group/",
   "https://github.com/nvim-telescope/telescope.nvim",
   "https://github.com/rockerBOO/awesome-neovim",
+
+  -- OR
+
+  -- aliases with formatted urls for query search
+  ["github_code_search"] = "https://github.com/search?q=%s&type=code",
+  ["github_repo_search"] = "https://github.com/search?q=%s&type=repositories",
+
+  -- OR
+
+  -- aliases with direct urls
+  ["browse.nvim"] = "https://github.com/lalitmee/browse.nvim",
 }
 ```
 
@@ -128,9 +140,11 @@ You can customize the `input_search()` to use the `provider` you like. Possible 
 - `bing`
 
 ```lua
+-- default values for the setup
 require('browse').setup({
   -- search provider you want to use
-  provider = "google", -- default
+  provider = "google",
+  bookmarks = {}
 })
 ```
 
