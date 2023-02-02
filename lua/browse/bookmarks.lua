@@ -12,6 +12,7 @@ local M = {}
 
 -- search bookmarks
 M.search_bookmarks = function(config)
+    config = config or {}
     local bookmarks = config["bookmarks"] or defaults.opts["bookmarks"] or {}
     local theme = themes.get_dropdown()
     local opts = vim.tbl_deep_extend("force", config, theme or {})
