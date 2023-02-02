@@ -31,6 +31,15 @@
 
 ## Installation
 
+- [lazy.nvim](https://github.com/folke/lazy.nvim)
+
+  ```lua
+  {
+  "lalitmee/browse.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim" },
+  }
+  ```
+
 - [packer.nvim](https://github.com/wbthomason/packer.nvim)
 
   ```lua
@@ -47,11 +56,87 @@
   Plug 'lalitmee/browse.nvim'
   ```
 
+## Setup
+
+```lua
+-- default values for the setup
+require('browse').setup({
+  -- search provider you want to use
+  provider = "google", -- duckduckgo, bing
+
+  -- either pass it here or just pass the table to the functions
+  -- see below for more
+  bookmarks = {}
+})
+```
+
 ## Usage
 
-`browse.nvim` exposes the following for:
+There are so many ways in which you can use this to improve your search experience. After `bookmarks` table support for multiple formats and organized structure of the bookmarks, you can just use `open_bookmarks()` api.
 
-### Search
+### bookmarks
+
+For bookmarks you can declare your bookmarks in lua table format. `bookmarks`
+table can contain multiple structures.
+
+1. grouped urls with a name key in the table (recommended)
+
+   ```lua
+   local bookmarks = {
+     ["github"] = {
+         ["name"] = "search github from neovim",
+         ["code_search"] = "https://github.com/search?q=%s&type=code",
+         ["repo_search"] = "https://github.com/search?q=%s&type=repositories",
+         ["issues_search"] = "https://github.com/search?q=%s&type=issues",
+         ["pulls_search"] = "https://github.com/search?q=%s&type=pullrequests",
+     },
+   }
+   ```
+
+2. urls with aliases
+
+   ```lua
+   local bookmarks = {
+     ["github_code_search"] = "https://github.com/search?q=%s&type=code",
+     ["github_repo_search"] = "https://github.com/search?q=%s&type=repositories",
+   }
+   ```
+
+3. urls with a query parameter
+
+   ```lua
+   local bookmarks = {
+     "https://github.com/search?q=%s&type=code",
+     "https://github.com/search?q=%s&type=repositories",
+   }
+   ```
+
+4. simple and direct urls
+
+   ```lua
+   local bookmarks = {
+        "https://github.com/hoob3rt/lualine.nvim",
+        "https://github.com/neovim/neovim",
+        "https://neovim.discourse.group/",
+        "https://github.com/nvim-telescope/telescope.nvim",
+        "https://github.com/rockerBOO/awesome-neovim",
+    }
+   ```
+
+5. you can also combine all of the above in a table if you want.
+
+and then pass this table into the `browse()` function like this
+
+```lua
+vim.keymap.set("n", "<leader>b", function()
+  require("browse").browse({ bookmarks = bookmarks })
+end)
+```
+
+> If this `bookmarks` table will be empty or will not be passed and if you select `Bookmarks`
+> from `telescope` result, you will not see anything in the telescope results.
+
+### search
 
 - `input_search()`, it will prompt you to search for something
 
@@ -85,50 +170,13 @@ require('browse.devdocs').search()
 require('browse.devdocs').search_with_filetype()
 ```
 
-### MDN
+### mdn
 
 - `mdn.search()`, search for anything on [MDN](https://developer.mozilla.org/en-US/)
 
 ```lua
 require('browse.mdn').search()
 ```
-
-## bookmarks
-
-For bookmarks you can declare your bookmarks in lua table format. for example:
-
-```lua
-local bookmarks = {
-  -- direct urls as bookmarks
-  "https://github.com/hoob3rt/lualine.nvim",
-  "https://github.com/neovim/neovim",
-  "https://neovim.discourse.group/",
-  "https://github.com/nvim-telescope/telescope.nvim",
-  "https://github.com/rockerBOO/awesome-neovim",
-
-  -- OR
-
-  -- aliases with formatted urls for query search
-  ["github_code_search"] = "https://github.com/search?q=%s&type=code",
-  ["github_repo_search"] = "https://github.com/search?q=%s&type=repositories",
-
-  -- OR
-
-  -- aliases with direct urls
-  ["browse.nvim"] = "https://github.com/lalitmee/browse.nvim",
-}
-```
-
-and then pass this table into the `browse()` function like this
-
-```lua
-vim.keymap.set("n", "<leader>b", function()
-  require("browse").browse({ bookmarks = bookmarks })
-end)
-```
-
-> If this `bookmarks` table will be empty or will not be passed and if you select `Bookmarks`
-> from `telescope` result, you will not see anything in the telescope results.
 
 ## Customizations
 
@@ -138,15 +186,6 @@ You can customize the `input_search()` to use the `provider` you like. Possible 
 - `duckduckgo`
 - `brave`
 - `bing`
-
-```lua
--- default values for the setup
-require('browse').setup({
-  -- search provider you want to use
-  provider = "google",
-  bookmarks = {}
-})
-```
 
 ## Advanced usage
 
@@ -161,29 +200,31 @@ function command(name, rhs, opts)
   vim.api.nvim_create_user_command(name, rhs, opts)
 end
 
-command("BrowseInputSearch", function()
+command("InputSearch", function()
   browse.input_search()
 end, {})
 
+-- this will open telescope using dropdown theme with all the available options
+-- in which `browse.nvim` can be used
 command("Browse", function()
   browse.browse({ bookmarks = bookmarks })
-end, {})
+end)
 
-command("BrowseBookmarks", function()
+command("Bookmarks", function()
   browse.open_bookmarks({ bookmarks = bookmarks })
-end, {})
+end)
 
-command("BrowseDevdocsSearch", function()
+command("DevdocsSearch", function()
   browse.devdocs.search()
-end, {})
+end)
 
-command("BrowseDevdocsFiletypeSearch", function()
+command("DevdocsFiletypeSearch", function()
   browse.devdocs.search_with_filetype()
-end, {})
+end)
 
-command("BrowseMdnSearch", function()
+command("MdnSearch", function()
   browse.mdn.search()
-end, {})
+end)
 ```
 
 ## Acknowledgements and Credits
