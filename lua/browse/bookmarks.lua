@@ -89,7 +89,8 @@ M.search_bookmarks = function(config)
                         local _, list = remove_element(value, "name")
                         M.search_bookmarks({ bookmarks = list })
                     else
-                        if string.find(value, "=") then
+                        -- checking for `%` in the url
+                        if string.match(value, "%%") then
                             utils.format_search(value)()
                         else
                             utils.default_search(value)
