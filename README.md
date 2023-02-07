@@ -8,7 +8,7 @@
 [![Lua](https://img.shields.io/badge/Lua-blue.svg?style=for-the-badge&logo=lua)](http://www.lua.org)
 [![License](https://img.shields.io/github/license/lalitmee/browse.nvim?color=%23FFC600&style=for-the-badge)](https://github.com/lalitmee/browse.nvim/blob/main/LICENSE)
 
-![browse.nvim](https://user-images.githubusercontent.com/10762218/197941488-eed7780c-c7c0-47d8-9dcb-f1347944b61e.gif)
+![browse.nvim](https://user-images.githubusercontent.com/10762218/217238018-29564296-063a-43cb-a3c1-28703db9c31c.gif)
 
 </div>
 
