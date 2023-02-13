@@ -234,6 +234,4 @@ end)
 
 ## Donate
 
-[![](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ilalitmee)
-
-Buy me a coffee through [paypal](https://paypal.me/ilalitmee).
+<a href="https://www.buymeacoffee.com/iamlalitmee" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
