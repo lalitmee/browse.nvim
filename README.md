@@ -232,6 +232,6 @@ end)
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [open-browser.nvim](https://github.com/tyru/open-browser.vim)
 
-## Donate
+## Support
 
 <a href="https://www.buymeacoffee.com/iamlalitmee" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
