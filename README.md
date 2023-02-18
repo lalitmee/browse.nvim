@@ -35,8 +35,8 @@
 
   ```lua
   {
-  "lalitmee/browse.nvim",
-    dependencies = { "nvim-telescope/telescope.nvim" },
+      "lalitmee/browse.nvim",
+      dependencies = { "nvim-telescope/telescope.nvim" },
   }
   ```
 
@@ -44,8 +44,8 @@
 
   ```lua
   use({
-    "lalitmee/browse.nvim",
-    requires = { "nvim-telescope/telescope.nvim" },
+      "lalitmee/browse.nvim",
+      requires = { "nvim-telescope/telescope.nvim" },
   })
   ```
 
