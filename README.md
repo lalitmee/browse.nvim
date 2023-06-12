@@ -23,9 +23,10 @@
 
 - [neovim](https://github.com/neovim/neovim) (0.7.0+)
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
-- [xdg-open](https://linux.die.net/man/1/xdg-open) (linux)
-- [open](https://ss64.com/osx/open.html) (mac)
-- [start](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/start) (windows)
+- open cmd
+  - [xdg-open](https://linux.die.net/man/1/xdg-open) (linux)
+  - [open](https://ss64.com/osx/open.html) (mac)
+  - [start](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/start) (windows)
 - [dressing.nvim](https://github.com/stevearc/dressing.nvim) it will make the inputs and selects pretty (optional)
 
 ## Installation
