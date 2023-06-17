@@ -67,7 +67,11 @@ end
 -- a generic searching function used everywhere
 M.search = function(target_fn, opts)
     local prompt = opts and opts.prompt or "Search String:"
-    vim.ui.input({ prompt = prompt, kind = "browse" }, function(input)
+    vim.ui.input({
+        prompt = prompt,
+        default = " ",
+        kind = "browse",
+    }, function(input)
         if input == nil or input == "" then
             return
         end
