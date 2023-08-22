@@ -18,6 +18,6 @@ M.search_input = utils.callback_search(function(input)
     end
 
     return path
-end)
+end, {})
 
 return M
