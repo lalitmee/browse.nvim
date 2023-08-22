@@ -10,11 +10,13 @@ local input_search = require("browse.input").search_input
 local devdocs = require("browse.devdocs")
 local mdn = require("browse.mdn")
 local defaults = require("browse.config")
+local get_visual_text = require("browse.utils").get_visual_text
 
 local browse = function(config)
     config = config or {}
 
     local bookmarks = config["bookmarks"] or defaults.opts["bookmarks"] or {}
+    local visual_text = get_visual_text()
 
     local theme = themes.get_dropdown()
     local opts = vim.tbl_deep_extend("force", config, theme or {})
@@ -50,15 +52,15 @@ local browse = function(config)
                     local browse_selection = selection["ordinal"]
 
                     if browse_selection == "bookmarks" then
-                        search_bookmarks({ bookmarks })
+                        search_bookmarks({ bookmarks = bookmarks, visual_text = visual_text })
                     elseif browse_selection == "input" then
-                        input_search()
+                        input_search(visual_text)
                     elseif browse_selection == "devdocs" then
-                        devdocs.search()
+                        devdocs.search(visual_text)
                     elseif browse_selection == "devdocs_file" then
-                        devdocs.search_with_filetype()
+                        devdocs.search_with_filetype(visual_text)
                     elseif browse_selection == "mdn" then
-                        mdn.search()
+                        mdn.search(visual_text)
                     end
                 end)
                 return true

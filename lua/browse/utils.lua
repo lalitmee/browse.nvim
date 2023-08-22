@@ -67,7 +67,9 @@ end
 -- a generic searching function used everywhere
 M.search = function(target_fn, opts)
     local prompt = opts and opts.prompt or "Search String:"
-    vim.ui.input({ prompt = prompt, kind = "browse" }, function(input)
+    local default = opts and opts.visual_text or ""
+    print(default)
+    vim.ui.input({ prompt = prompt, default = default, kind = "browse" }, function(input)
         if input == nil or input == "" then
             return
         end
@@ -79,18 +81,29 @@ end
 
 -- a generic searching closure util
 M.callback_search = function(custom_fn, opts)
-    return function()
+    return function(visual_text)
+        opts.visual_text = visual_text
         M.search(custom_fn, opts)
     end
 end
 
 -- a generic searching for a format
 M.format_search = function(format, opts)
-    return function()
+    return function(visual_text)
+        opts.visual_text = visual_text
         M.search(function(input)
             return string.format(format, input)
         end, opts)
     end
+end
+
+M.get_visual_text = function()
+  local reg_bak = vim.fn.getreg "v"
+  vim.fn.setreg("v", {})
+  vim.cmd [[noau normal! "vy\<esc\>]]
+  local sel_text = vim.fn.getreg "v"
+  vim.fn.setreg("v", reg_bak)
+  return #sel_text == 0 and "" or string.gsub(sel_text, "\n", "")
 end
 
 return M
