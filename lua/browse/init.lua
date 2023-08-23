@@ -6,7 +6,7 @@ local action_state = require("telescope.actions.state")
 local themes = require("telescope.themes")
 
 local search_bookmarks = require("browse.bookmarks").search_bookmarks
-local input_search = require("browse.input").search_input
+local search_input = require("browse.input").search_input
 local devdocs = require("browse.devdocs")
 local mdn = require("browse.mdn")
 local defaults = require("browse.config")
@@ -27,11 +27,11 @@ local browse = function(config)
 
             finder = finders.new_table({
                 results = {
-                    { "Bookmarks Search", "bookmarks" },
-                    { "Devdocs Search", "devdocs" },
+                    { "Bookmarks Search",             "bookmarks" },
+                    { "Devdocs Search",               "devdocs" },
                     { "Devdocs Search with filetype", "devdocs_file" },
-                    { "Input Search", "input" },
-                    { "MDN Web Docs", "mdn" },
+                    { "Input Search",                 "input" },
+                    { "MDN Web Docs",                 "mdn" },
                 },
                 entry_maker = function(entry)
                     return {
@@ -54,7 +54,7 @@ local browse = function(config)
                     if browse_selection == "bookmarks" then
                         search_bookmarks({ bookmarks = bookmarks, visual_text = visual_text })
                     elseif browse_selection == "input" then
-                        input_search(visual_text)
+                        search_input(visual_text)
                     elseif browse_selection == "devdocs" then
                         devdocs.search(visual_text)
                     elseif browse_selection == "devdocs_file" then
@@ -71,8 +71,14 @@ end
 
 return {
     browse = browse,
-    input_search = input_search,
-    open_bookmarks = search_bookmarks,
+    input_search = function()
+        search_input(get_visual_text())
+    end,
+    open_bookmarks = function(config)
+        config = config or {}
+        config.visual_text = get_visual_text()
+        search_bookmarks(config)
+    end,
     devdocs = devdocs,
     mdn = mdn,
     setup = defaults.setup,
