@@ -68,7 +68,6 @@ end
 M.search = function(target_fn, opts)
     local prompt = opts and opts.prompt or "Search String:"
     local default = opts and opts.visual_text or ""
-    print(default)
     vim.ui.input({ prompt = prompt, default = default, kind = "browse" }, function(input)
         if input == nil or input == "" then
             return
@@ -97,13 +96,14 @@ M.format_search = function(format, opts)
     end
 end
 
+-- get selected text from visual mode (via a temp register)
 M.get_visual_text = function()
-  local reg_bak = vim.fn.getreg "v"
-  vim.fn.setreg("v", {})
-  vim.cmd [[noau normal! "vy\<esc\>]]
-  local sel_text = vim.fn.getreg "v"
-  vim.fn.setreg("v", reg_bak)
-  return #sel_text == 0 and "" or string.gsub(sel_text, "\n", "")
+    local reg_bak = vim.fn.getreg("v")
+    vim.fn.setreg("v", {})
+    vim.cmd([[noau normal! "vy\<esc\>]])
+    local sel_text = vim.fn.getreg("v")
+    vim.fn.setreg("v", reg_bak)
+    return string.gsub(sel_text, "\n", "")
 end
 
 return M
