@@ -7,7 +7,6 @@ local action_state = require("telescope.actions.state")
 
 local utils = require("browse.utils")
 local defaults = require("browse.config")
-local get_visual_text = require("browse.utils").get_visual_text
 
 local M = {}
 
@@ -15,8 +14,7 @@ local M = {}
 M.search_bookmarks = function(config)
     config = config or {}
     local bookmarks = config["bookmarks"] or defaults.opts["bookmarks"] or {}
-    -- skip if get it before
-    local visual_text = config["visual_text"] or get_visual_text()
+    local visual_text = config["visual_text"] or utils.get_visual_text()
     local bookmarks_copy = vim.deepcopy(bookmarks)
     local theme = themes.get_dropdown()
     local opts = vim.tbl_deep_extend("force", config, theme or {})
