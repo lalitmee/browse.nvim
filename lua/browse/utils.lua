@@ -7,6 +7,12 @@ local get_os_name = function()
     return os_name
 end
 
+-- WSL 
+local is_wsl = function ()
+    local output = vim.fn.systemlist "uname -r"
+    return not not string.find(output[1] or "", "WSL")
+end
+
 -- get open cmd
 local get_open_cmd = function()
     local os_name = get_os_name()
@@ -17,7 +23,11 @@ local get_open_cmd = function()
     elseif os_name == "Darwin" then
         open_cmd = { "open" }
     else
-        open_cmd = { "xdg-open" }
+        if is_wsl then
+          open_cmd = { "wsl-open" }
+        else
+          open_cmd = { "xdg-open" }
+        end
     end
     return open_cmd
 end
