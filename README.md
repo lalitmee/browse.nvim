@@ -25,6 +25,7 @@
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - open cmd
   - [xdg-open](https://linux.die.net/man/1/xdg-open) (linux)
+  - [wsl-open](https://github.com/4U6U57/wsl-open) (wsl)
   - [open](https://ss64.com/osx/open.html) (mac)
   - [start](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/start) (windows)
 - [dressing.nvim](https://github.com/stevearc/dressing.nvim) it will make the inputs and selects pretty (optional)
