@@ -23,7 +23,7 @@ local get_open_cmd = function()
     elseif os_name == "Darwin" then
         open_cmd = { "open" }
     else
-        if is_wsl then
+        if is_wsl() then
           open_cmd = { "wsl-open" }
         else
           open_cmd = { "xdg-open" }
