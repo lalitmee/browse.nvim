@@ -42,11 +42,11 @@ M.search_bookmarks = function(config)
             ordinal = entry
         elseif type(entry) == "table" and type(entry[2]) ~= "table" then
             value = entry[2]
-            display = entry[1] .. " -> " .. value
+            display = entry[1] .. "  " .. value
             ordinal = entry[1] .. entry[2]
         elseif type(entry) == "table" and type(entry[2]) == "table" then
             ordinal = entry[1]
-            display = entry[1] .. " ->"
+            display = entry[1] .. " "
 
             for k, v in pairs(entry[2]) do
                 ordinal = ordinal .. k .. v
