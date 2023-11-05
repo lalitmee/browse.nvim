@@ -72,7 +72,7 @@ M.search_bookmarks = function(config)
 
     pickers
         .new(opts, {
-            prompt_title = "Bookmarks",
+            prompt_title = "󰂺 Bookmarks",
             finder = create_finder(),
             sorter = conf.generic_sorter(opts),
             attach_mappings = function(prompt_bufnr, _)
