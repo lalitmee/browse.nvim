@@ -43,7 +43,7 @@ M.search_bookmarks = function(config)
         elseif type(entry) == "table" and type(entry[2]) ~= "table" then
             value = entry[2]
             display = entry[1] .. " -> " .. value
-            ordinal = value
+            ordinal = entry[1] .. entry[2]
         elseif type(entry) == "table" and type(entry[2]) == "table" then
             value = entry[2]
             display = entry[1] .. " -> " .. (entry[2]["name"] or "")
