@@ -119,4 +119,12 @@ M.get_visual_text = function()
     return string.gsub(sel_text, "\n", "")
 end
 
+--Get the domain of a URL
+--Example: https://obsidian.md => obsidian.md
+---@param url string: URL to which your domain will be extracted
+---@return string: Domain from the URL
+M.get_domain = function(url)
+    return string.match(url, "https?://([^/]+)")
+end
+
 return M
