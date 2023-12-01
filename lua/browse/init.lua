@@ -27,11 +27,11 @@ local browse = function(config)
 
             finder = finders.new_table({
                 results = {
-                    { "Bookmarks Search",             "bookmarks" },
-                    { "Devdocs Search",               "devdocs" },
+                    { "Bookmarks Search", "bookmarks" },
+                    { "Devdocs Search", "devdocs" },
                     { "Devdocs Search with filetype", "devdocs_file" },
-                    { "Input Search",                 "input" },
-                    { "MDN Web Docs",                 "mdn" },
+                    { "Input Search", "input" },
+                    { "MDN Web Docs", "mdn" },
                 },
                 entry_maker = function(entry)
                     return {
@@ -52,7 +52,10 @@ local browse = function(config)
                     local browse_selection = selection["ordinal"]
 
                     if browse_selection == "bookmarks" then
-                        search_bookmarks({ bookmarks = bookmarks, visual_text = visual_text })
+                        search_bookmarks({
+                            bookmarks = bookmarks,
+                            visual_text = visual_text,
+                        })
                     elseif browse_selection == "input" then
                         search_input(visual_text)
                     elseif browse_selection == "devdocs" then
