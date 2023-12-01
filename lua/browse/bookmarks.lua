@@ -13,6 +13,7 @@ local M = {}
 -- search bookmarks
 M.search_bookmarks = function(config)
     config = config or {}
+    local icons = config["icons"] or defaults.opts["icons"] or {}
     local bookmarks = config["bookmarks"] or defaults.opts["bookmarks"] or {}
     local visual_text = config["visual_text"]
     local bookmarks_copy = vim.deepcopy(bookmarks)
@@ -38,10 +39,10 @@ M.search_bookmarks = function(config)
             ordinal = entry
         elseif type(entry) == "table" and type(entry[2]) ~= "table" then
             value = entry[2]
-            display = entry[1] .. "  " .. value
+            display = entry[1] .. " " .. icons.bookmark_alias .. " " .. value
             ordinal = entry[1] .. entry[2]
         elseif type(entry) == "table" and type(entry[2]) == "table" then
-            display = entry[1] .. " "
+            display = entry[1] .. " " .. icons.grouped_bookmarks
             ordinal = entry[1]
 
             for k, v in pairs(entry[2]) do
@@ -50,7 +51,7 @@ M.search_bookmarks = function(config)
                 if type(k) == "string" then
                     display = display .. " " .. k
                 else
-                    display = display .. " " .. get_domain(v)
+                    display = display .. " " .. utils.get_domain(v)
                 end
             end
 
@@ -85,7 +86,7 @@ M.search_bookmarks = function(config)
 
     pickers
         .new(opts, {
-            prompt_title = "󰂺 Bookmarks",
+            prompt_title = icons.bookmarks_prompt .. "Bookmarks",
             finder = create_finder(),
             sorter = conf.generic_sorter(opts),
             attach_mappings = function(prompt_bufnr, _)
