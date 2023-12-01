@@ -29,10 +29,6 @@ M.search_bookmarks = function(config)
         end
     end
 
-    local function get_domain(url)
-        return string.match(url, "https?://([^/]+)")
-    end
-
     local function entry_maker(entry)
         local value, display, ordinal
 
