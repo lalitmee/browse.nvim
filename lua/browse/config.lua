@@ -10,6 +10,11 @@ M.opts = {
         -- ["github_code_search"] = "https://github.com/search?q=%s&type=code",
         -- ["github_repo_search"] = "https://github.com/search?q=%s&type=respositories",
     },
+    icons = {
+        bookmark_alias = "->", -- if you have nerd fonts, you can set this to ""
+        bookmarks_prompt = "", -- if you have nerd fonts, you can set this to "󰂺 "
+        grouped_bookmarks = "->", -- if you have nerd fonts, you can set this to 
+    },
 }
 
 function M.setup(opts)
