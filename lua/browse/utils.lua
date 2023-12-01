@@ -7,9 +7,9 @@ local get_os_name = function()
     return os_name
 end
 
--- WSL 
-local is_wsl = function ()
-    local output = vim.fn.systemlist "uname -r"
+-- WSL
+local is_wsl = function()
+    local output = vim.fn.systemlist("uname -r")
     return not not string.find(output[1] or "", "WSL")
 end
 
@@ -24,9 +24,9 @@ local get_open_cmd = function()
         open_cmd = { "open" }
     else
         if is_wsl() then
-          open_cmd = { "wsl-open" }
+            open_cmd = { "wsl-open" }
         else
-          open_cmd = { "xdg-open" }
+            open_cmd = { "xdg-open" }
         end
     end
     return open_cmd
@@ -78,14 +78,17 @@ end
 M.search = function(target_fn, opts)
     local prompt = opts and opts.prompt or "Search String:"
     local default = opts and opts.visual_text or ""
-    vim.ui.input({ prompt = prompt, default = default, kind = "browse" }, function(input)
-        if input == nil or input == "" then
-            return
-        end
+    vim.ui.input(
+        { prompt = prompt, default = default, kind = "browse" },
+        function(input)
+            if input == nil or input == "" then
+                return
+            end
 
-        local escaped_input = escape_target(vim.fn.trim(input))
-        M.default_search(target_fn(escaped_input))
-    end)
+            local escaped_input = escape_target(vim.fn.trim(input))
+            M.default_search(target_fn(escaped_input))
+        end
+    )
 end
 
 -- a generic searching closure util
