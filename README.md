@@ -67,7 +67,7 @@ require('browse').setup({
 
   -- either pass it here or just pass the table to the functions
   -- see below for more
-  bookmarks = {}
+  bookmarks = {},
   icons = {
       bookmark_alias = "->", -- if you have nerd fonts, you can set this to ""
       bookmarks_prompt = "", -- if you have nerd fonts, you can set this to "󰂺 "
