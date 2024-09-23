@@ -14,6 +14,9 @@ local M = {}
 M.search_bookmarks = function(config)
     config = config or {}
     local icons = config["icons"] or defaults.opts["icons"] or {}
+    local persist_grouped_bookmarks_query = config["persist_grouped_bookmarks_query"]
+        or defaults.opts["persist_grouped_bookmarks_query"]
+        or false
     local bookmarks = config["bookmarks"] or defaults.opts["bookmarks"] or {}
     local visual_text = config["visual_text"]
     local bookmarks_copy = vim.deepcopy(bookmarks)
@@ -107,8 +110,19 @@ M.search_bookmarks = function(config)
 
                         local list = remove_element(tbl_copy, "name")
 
+                        local search_bookmarks_opts = {
+                            bookmarks = list,
+                            visual_text,
+                        }
+
+                        if persist_grouped_bookmarks_query then
+                            local query = action_state.get_current_line()
+
+                            search_bookmarks_opts.default_text = query
+                        end
+
                         -- search bookmarks with the new list
-                        M.search_bookmarks({ bookmarks = list, visual_text })
+                        M.search_bookmarks(search_bookmarks_opts)
                     elseif type(value) == "string" then
                         -- checking for `%` in the url
                         if string.match(value, "%%") then

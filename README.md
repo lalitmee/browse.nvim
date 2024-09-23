@@ -73,6 +73,9 @@ require('browse').setup({
       bookmarks_prompt = "", -- if you have nerd fonts, you can set this to "󰂺 "
       grouped_bookmarks = "->", -- if you have nerd fonts, you can set this to 
   }
+  -- if you want to persist the query for grouped bookmarks
+  -- See https://github.com/lalitmee/browse.nvim/pull/23
+  persist_grouped_bookmarks_query = false,
 })
 ```
 

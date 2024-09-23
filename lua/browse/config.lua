@@ -15,6 +15,7 @@ M.opts = {
         bookmarks_prompt = "",
         grouped_bookmarks = "->",
     },
+    persist_grouped_bookmarks_query = false,
 }
 
 function M.setup(opts)
