@@ -55,6 +55,7 @@ local browse = function(config)
                         search_bookmarks({
                             bookmarks = bookmarks,
                             visual_text = visual_text,
+                            cache_picker = { num_pickers = defaults.opts.cache_pickers },
                         })
                     elseif browse_selection == "input" then
                         search_input(visual_text)
@@ -80,6 +81,7 @@ return {
     open_bookmarks = function(config)
         config = config or {}
         config.visual_text = get_visual_text()
+        config.cache_picker = { num_pickers = defaults.opts.cache_pickers }
         search_bookmarks(config)
     end,
     devdocs = devdocs,

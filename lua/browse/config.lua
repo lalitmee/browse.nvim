@@ -54,6 +54,10 @@ M.opts = {
     },
     
     persist_grouped_bookmarks_query = false,
+
+    -- Telescope options
+    cache_pickers = 10,
+    sort_results = true,
 }
 
 function M.setup(opts)

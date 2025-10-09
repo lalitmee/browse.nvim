@@ -13,7 +13,7 @@ NC='\033[0m' # No Color
 
 # Default paths
 PLENARY_DIR="${PLENARY_DIR:-/tmp/plenary.nvim}"
-PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 echo -e "${YELLOW}Browse.nvim Test Runner${NC}"
 echo "==============================="
