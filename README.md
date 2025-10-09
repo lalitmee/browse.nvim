@@ -7,7 +7,7 @@
 ![Neovim](https://img.shields.io/badge/NeoVim-%2357A143.svg?&style=for-the-badge&logo=neovim&logoColor=white)
 [![Lua](https://img.shields.io/badge/Lua-blue.svg?style=for-the-badge&logo=lua)](http://www.lua.org)
 [![GitHub Repo stars](https://img.shields.io/github/stars/lalitmee/browse.nvim?style=for-the-badge)](https://github.com/lalitmee/browse.nvim/stargazers)
-[![CI](https://img.shields.io/github/actions/workflow_status/lalitmee/browse.nvim/ci.yml?style=for-the-badge)](https://github.com/lalitmee/browse.nvim/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/github/workflow/status/lalitmee/browse.nvim/CI?label=Tests&style=for-the-badge)](https://github.com/lalitmee/browse.nvim/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/lalitmee/browse.nvim?color=%23FFC600&style=for-the-badge)](https://github.com/lalitmee/browse.nvim/blob/main/LICENSE)
 
 ![browse.nvim](https://user-images.githubusercontent.com/10762218/217238018-29564296-063a-43cb-a3c1-28703db9c31c.gif)
@@ -90,6 +90,7 @@ require('browse').setup({
     deduplicate_bookmarks = true,
     cache_bookmarks = true,
     cache_duration = 60,
+    create_commands = true, -- Creates default user commands
     plain_text = {
         delimiters = { ":", "=" },
         comment_chars = { "#", ";" },
@@ -131,6 +132,9 @@ require('browse').setup({
 - `cache_duration` (number): The duration in seconds for which the bookmark cache is valid.
   - **Default**: `60`
 
+- `create_commands` (boolean): If `true`, the plugin will create default user commands for you.
+  - **Default**: `true`
+
 - `plain_text` (table): Configuration for parsing plain text (`.txt`) bookmark files.
   - `delimiters` (table): Characters used to separate a bookmark's name from its URL.
   - `comment_chars` (table): Characters that signify the start of a comment line.
@@ -160,6 +164,17 @@ The main entry point is the `require('browse').browse()` Lua function. This open
 
 Text selected in visual mode will be used as the initial query for searches.
 
+### Commands
+
+By default, `browse.nvim` creates several commands for you. You can disable this by setting `create_commands = false` in your setup.
+
+- `:Browse`: Opens the main Telescope picker to select a search type.
+- `:BrowseBookmarks`: Opens the Telescope picker directly to your bookmarks.
+- `:BrowseSearch`: Prompts for input and searches using your configured `provider`.
+- `:DevdocsSearch`: Prompts for input and searches on devdocs.io.
+- `:DevdocsFiletypeSearch`: Prompts for input and searches on devdocs.io, using the current buffer's filetype.
+- `:MdnSearch`: Prompts for input and searches on MDN Web Docs.
+
 ### API
 
 All public functions are available under the `require('browse')` module.
@@ -177,33 +192,6 @@ All public functions are available under the `require('browse')` module.
 - `browse.devdocs.search_with_filetype()`: Prompts for input and searches on devdocs.io, using the current buffer's filetype to narrow the search.
 
 - `browse.mdn.search()`: Prompts for input and searches on MDN Web Docs.
-
-### Commands
-
-The plugin does not create any commands by default. You can create them yourself for easier access.
-
-**Example:**
-```lua
-vim.api.nvim_create_user_command("Browse", function()
-    require("browse").browse()
-end, {})
-
-vim.api.nvim_create_user_command("BrowseBookmarks", function()
-    require("browse").open_bookmarks()
-end, {})
-
-vim.api.nvim_create_user_command("BrowseSearch", function()
-    require("browse").input_search()
-end, {})
-
-vim.api.nvim_create_user_command("DevdocsSearch", function()
-    require("browse.devdocs").search()
-end, {})
-
-vim.api.nvim_create_user_command("MdnSearch", function()
-    require("browse.mdn").search()
-end, {})
-```
 
 ## Bookmarks
 

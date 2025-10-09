@@ -58,6 +58,7 @@ M.opts = {
     -- Telescope options
     cache_pickers = 10,
     sort_results = true,
+    create_commands = true,
 }
 
 function M.setup(opts)

@@ -1,0 +1,41 @@
+name: Generate Docs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'lua/**'
+      - 'doc/browse-nvim.txt'
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # We need a token with write access to push the changes back
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: v0.10.0 # Using a specific version for consistency
+
+      - name: Generate helptags
+        run: nvim --headless -c "helptags doc" -c "qa!"
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add doc/tags
+          # Only commit and push if there are actual changes
+          if ! git diff --staged --quiet; then
+            git commit -m "docs: auto-generate helptags"
+            git push
+          else
+            echo "No changes to commit."
+          fi

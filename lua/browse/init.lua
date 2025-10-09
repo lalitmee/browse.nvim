@@ -73,7 +73,7 @@ local browse = function(config)
         :find()
 end
 
-return {
+local M = {
     browse = browse,
     input_search = function()
         search_input(get_visual_text())
@@ -86,5 +86,24 @@ return {
     end,
     devdocs = devdocs,
     mdn = mdn,
-    setup = defaults.setup,
 }
+
+function M.setup(opts)
+    defaults.setup(opts)
+
+    if defaults.opts.create_commands then
+        local function command(name, rhs, cmd_opts)
+            cmd_opts = cmd_opts or {}
+            vim.api.nvim_create_user_command(name, rhs, cmd_opts)
+        end
+
+        command("Browse", function() M.browse() end, {})
+        command("BrowseBookmarks", function() M.open_bookmarks() end, {})
+        command("BrowseSearch", function() M.input_search() end, {})
+        command("DevdocsSearch", function() M.devdocs.search() end, {})
+        command("DevdocsFiletypeSearch", function() M.devdocs.search_with_filetype() end, {})
+        command("MdnSearch", function() M.mdn.search() end, {})
+    end
+end
+
+return M
