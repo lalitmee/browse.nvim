@@ -7,6 +7,7 @@ local action_state = require("telescope.actions.state")
 
 local utils = require("browse.utils")
 local defaults = require("browse.config")
+local bookmark_manager = require("browse.bookmark_manager")
 
 local M = {}
 
@@ -17,7 +18,15 @@ M.search_bookmarks = function(config)
     local persist_grouped_bookmarks_query = config["persist_grouped_bookmarks_query"]
         or defaults.opts["persist_grouped_bookmarks_query"]
         or false
-    local bookmarks = config["bookmarks"] or defaults.opts["bookmarks"] or {}
+    
+    -- Use bookmark manager if no specific bookmarks provided
+    local bookmarks
+    if config["bookmarks"] and not vim.tbl_isempty(config["bookmarks"]) then
+        bookmarks = config["bookmarks"]
+    else
+        bookmarks = bookmark_manager.get_bookmarks()
+    end
+    
     local visual_text = config["visual_text"]
     local bookmarks_copy = vim.deepcopy(bookmarks)
     local theme = themes.get_dropdown()
@@ -33,6 +42,16 @@ M.search_bookmarks = function(config)
         end
     end
 
+    local function count_items(tbl)
+        local count = 0
+        for k, _ in pairs(tbl) do
+            if k ~= "name" then
+                count = count + 1
+            end
+        end
+        return count
+    end
+
     local function entry_maker(entry)
         local value, display, ordinal
 
@@ -45,22 +64,10 @@ M.search_bookmarks = function(config)
             display = entry[1] .. " " .. icons.bookmark_alias .. " " .. value
             ordinal = entry[1] .. entry[2]
         elseif type(entry) == "table" and type(entry[2]) == "table" then
-            display = entry[1] .. " " .. icons.grouped_bookmarks
+            local count = count_items(entry[2])
+            display = entry[1] .. " " .. icons.grouped_bookmarks .. " (" .. count .. ")"
             ordinal = entry[1]
-
-            for k, v in pairs(entry[2]) do
-                ordinal = ordinal .. k .. v
-
-                if type(k) == "string" then
-                    display = display .. " " .. k
-                else
-                    display = display .. " " .. utils.get_domain(v)
-                end
-            end
-
             value = entry[2]
-            display = display
-            ordinal = ordinal
         end
 
         return {

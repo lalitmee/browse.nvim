@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Test runner for browse.nvim
+# Requires plenary.nvim for testing framework
+
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Default paths
+PLENARY_DIR="${PLENARY_DIR:-/tmp/plenary.nvim}"
+PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+echo -e "${YELLOW}Browse.nvim Test Runner${NC}"
+echo "==============================="
+
+# Check if plenary exists, clone if not
+if [ ! -d "$PLENARY_DIR" ]; then
+    echo -e "${YELLOW}Cloning plenary.nvim to $PLENARY_DIR${NC}"
+    git clone https://github.com/nvim-lua/plenary.nvim "$PLENARY_DIR"
+fi
+
+# Export plenary directory for tests
+export PLENARY_DIR="$PLENARY_DIR"
+
+# Change to plugin directory
+cd "$PLUGIN_DIR"
+
+# Run tests with nvim
+echo -e "${YELLOW}Running tests...${NC}"
+
+# Test each file individually for better error reporting
+TEST_FILES=("tests/browse/utils_spec.lua" "tests/browse/browser_bookmarks_spec.lua" "tests/browse/file_bookmarks_spec.lua" "tests/browse/bookmark_manager_spec.lua")
+FAILED_TESTS=()
+
+for test_file in "${TEST_FILES[@]}"; do
+    echo -e "${YELLOW}Running $test_file...${NC}"
+    if nvim --headless --noplugin -u tests/init.lua -c "lua require('plenary.busted').run('$test_file')" -c "qa!"; then
+        echo -e "${GREEN}✓ $test_file passed${NC}"
+    else
+        echo -e "${RED}✗ $test_file failed${NC}"
+        FAILED_TESTS+=("$test_file")
+    fi
+done
+
+if [ ${#FAILED_TESTS[@]} -eq 0 ]; then
+    echo -e "${GREEN}✓ All tests passed!${NC}"
+    exit 0
+else
+    echo -e "${RED}✗ ${#FAILED_TESTS[@]} test(s) failed: ${FAILED_TESTS[*]}${NC}"
+    exit 1
+fi

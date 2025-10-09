@@ -1,0 +1,40 @@
+development:
+  name: Development Resources
+  github_search: https://github.com/search?q=%s&type=code
+  stackoverflow: https://stackoverflow.com/search?q=%s
+  devdocs: https://devdocs.io/#q=%s
+  mdn: https://developer.mozilla.org/en-US/search?q=%s
+
+neovim:
+  name: Neovim Ecosystem  
+  neovim_main: https://github.com/neovim/neovim
+  awesome_neovim: https://github.com/rockerBOO/awesome-neovim
+  neovim_docs: https://neovim.io/doc/user/
+  nvim_discourse: https://neovim.discourse.group/
+
+documentation:
+  name: Documentation Sites
+  lua_manual: https://www.lua.org/manual/5.4/
+  rust_book: https://doc.rust-lang.org/book/
+  go_docs: https://golang.org/doc/
+  python_docs: https://docs.python.org/3/
+
+tools:
+  name: Development Tools
+  regex101: https://regex101.com/
+  json_formatter: https://jsonformatter.org/
+  base64_decode: https://www.base64decode.org/
+  color_picker: https://htmlcolorcodes.com/color-picker/
+
+learning:
+  name: Learning Resources
+  exercism: https://exercism.org/
+  leetcode: https://leetcode.com/
+  freecodecamp: https://www.freecodecamp.org/
+  coursera: https://www.coursera.org/
+
+direct_bookmarks:
+  name: Quick Links
+  hackernews: https://news.ycombinator.com
+  reddit_programming: https://www.reddit.com/r/programming
+  dev_to: https://dev.to
