@@ -253,6 +253,66 @@ Set `browser_bookmarks.enabled = true` to import bookmarks from your installed w
 - `auto_detect` (boolean): If `true`, the plugin will try to find installed browsers and enable them automatically if they are not explicitly set in the `browsers` table.
 - `group_by_folder` (boolean): If `true`, bookmarks will be nested in the picker according to the folder structure in your browser.
 
+## Bookmarks
+
+`browse.nvim` can aggregate bookmarks from three sources: a Lua table, external files, and your web browser's bookmarks.
+
+### Lua Table
+
+You can define bookmarks directly in your `setup()` call or pass them to the `browse()` or `open_bookmarks()` functions. The table can have several formats:
+
+1.  **Simple list of URLs**:
+    ```lua
+    bookmarks = {
+        "https://neovim.io",
+        "https://github.com/nvim-telescope/telescope.nvim",
+    }
+    ```
+
+2.  **Aliases for URLs** (name = URL):
+    ```lua
+    bookmarks = {
+        neovim = "https://neovim.io",
+        telescope = "https://github.com/nvim-telescope/telescope.nvim",
+    }
+    ```
+    If the URL contains `%s`, it will be treated as a search query, and you will be prompted for input.
+    ```lua
+    bookmarks = {
+        gh_search = "https://github.com/search?q=%s",
+    }
+    ```
+
+3.  **Grouped bookmarks**:
+    You can create nested tables to group related bookmarks.
+    ```lua
+    bookmarks = {
+        neovim = {
+            name = "Neovim Resources", -- Optional display name for the group
+            website = "https://neovim.io",
+            discourse = "https://neovim.discourse.group/",
+        },
+    }
+    ```
+
+### External Files
+
+Use the `bookmark_files` option to specify a list of files to load bookmarks from. The following formats are supported:
+
+- `json`: Standard JSON format.
+- `yaml`: YAML format.
+- `toml`: TOML format.
+- `txt`: A plain text file where each line is a bookmark. The format can be `name: url` or just `url`. Use the `plain_text` config table to customize delimiters and comments.
+
+### Browser Bookmarks
+
+Set `browser_bookmarks.enabled = true` to import bookmarks from your installed web browsers.
+
+- `enabled` (boolean): Master switch to enable/disable this feature.
+- `browsers` (table): A table of booleans to control which browsers to import from (e.g., `{ chrome = true, firefox = false }`).
+- `auto_detect` (boolean): If `true`, the plugin will try to find installed browsers and enable them automatically if they are not explicitly set in the `browsers` table.
+- `group_by_folder` (boolean): If `true`, bookmarks will be nested in the picker according to the folder structure in your browser.
+
 ## Acknowledgements and Credits
 
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
