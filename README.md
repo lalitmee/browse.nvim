@@ -6,29 +6,38 @@
 
 ![Neovim](https://img.shields.io/badge/NeoVim-%2357A143.svg?&style=for-the-badge&logo=neovim&logoColor=white)
 [![Lua](https://img.shields.io/badge/Lua-blue.svg?style=for-the-badge&logo=lua)](http://www.lua.org)
+[![GitHub Repo stars](https://img.shields.io/github/stars/lalitmee/browse.nvim?style=for-the-badge)](https://github.com/lalitmee/browse.nvim/stargazers)
+[![CI](https://img.shields.io/github/actions/workflow_status/lalitmee/browse.nvim/ci.yml?style=for-the-badge)](https://github.com/lalitmee/browse.nvim/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/lalitmee/browse.nvim?color=%23FFC600&style=for-the-badge)](https://github.com/lalitmee/browse.nvim/blob/main/LICENSE)
 
 ![browse.nvim](https://user-images.githubusercontent.com/10762218/217238018-29564296-063a-43cb-a3c1-28703db9c31c.gif)
 
 </div>
 
+`browse.nvim` is a plugin that provides a unified interface for browsing and
+searching web resources directly from within Neovim. It uses `telescope.nvim`
+to offer a powerful picker for accessing your bookmarks, searching with
+different providers (like Google, DuckDuckGo), and querying documentation
+sites like DevDocs and MDN.
+
 ## Features
 
-- cross platform
-- reduces your search key strokes for any stackoverflow query
-- [devdocs](https://devdocs.io) search
-- [MDN](https://developer.mozilla.org/en-US/) search
+- Cross-platform support.
+- Reduces keystrokes for search queries.
+- [DevDocs](https://devdocs.io) integration.
+- [MDN](https://developer.mozilla.org/en-US/) Web Docs integration.
+- Powerful and flexible bookmarking system, with support for multiple files (JSON, YAML, TOML, TXT) and browser bookmark importing.
 
 ## Requirements
 
 - [neovim](https://github.com/neovim/neovim) (0.7.0+)
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
-- open cmd
-  - [xdg-open](https://linux.die.net/man/1/xdg-open) (linux)
-  - [wsl-open](https://github.com/4U6U57/wsl-open) (wsl)
-  - [open](https://ss64.com/osx/open.html) (mac)
-  - [start](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/start) (windows)
-- [dressing.nvim](https://github.com/stevearc/dressing.nvim) it will make the inputs and selects pretty (optional)
+- A command-line opener:
+  - **Linux**: [xdg-open](https://linux.die.net/man/1/xdg-open)
+  - **WSL**: [wsl-open](https://github.com/4U6U57/wsl-open)
+  - **macOS**: `open`
+  - **Windows**: `start`
+- [dressing.nvim](https://github.com/stevearc/dressing.nvim) (optional, for a better UI).
 
 ## Installation
 
@@ -57,184 +66,204 @@
   Plug 'lalitmee/browse.nvim'
   ```
 
-## Setup
+## Configuration
 
+Call the `setup` function to configure the plugin.
+
+Here is the default configuration:
 ```lua
--- default values for the setup
 require('browse').setup({
-  -- search provider you want to use
-  provider = "google", -- duckduckgo, bing
-
-  -- either pass it here or just pass the table to the functions
-  -- see below for more
-  bookmarks = {},
-  icons = {
-      bookmark_alias = "->", -- if you have nerd fonts, you can set this to ""
-      bookmarks_prompt = "", -- if you have nerd fonts, you can set this to "󰂺 "
-      grouped_bookmarks = "->", -- if you have nerd fonts, you can set this to 
-  }
-  -- if you want to persist the query for grouped bookmarks
-  -- See https://github.com/lalitmee/browse.nvim/pull/23
-  persist_grouped_bookmarks_query = false,
+    provider = "google",
+    bookmarks = {},
+    bookmark_files = {},
+    browser_bookmarks = {
+        enabled = false,
+        browsers = {
+            chrome = false,
+            firefox = false,
+            safari = false,
+            edge = false,
+        },
+        group_by_folder = true,
+        auto_detect = true,
+    },
+    deduplicate_bookmarks = true,
+    cache_bookmarks = true,
+    cache_duration = 60,
+    plain_text = {
+        delimiters = { ":", "=" },
+        comment_chars = { "#", ";" },
+    },
+    icons = {
+        bookmark_alias = "->",
+        bookmarks_prompt = "",
+        grouped_bookmarks = "->",
+        file_bookmark = "📄",
+        browser_bookmark = "🌐",
+    },
+    persist_grouped_bookmarks_query = false,
+    cache_pickers = 10,
+    sort_results = true,
 })
 ```
 
+### Options
+
+- `provider` (string): The default search provider for `input_search()`.
+  - **Default**: `"google"`
+  - **Values**: `"google"`, `"duckduckgo"`, `"bing"`, `"brave"`.
+
+- `bookmarks` (table): A Lua table containing your bookmarks. See [Bookmarks](#bookmarks) for the detailed structure.
+  - **Default**: `{}`
+
+- `bookmark_files` (table): A list of absolute paths to external bookmark files.
+  - **Default**: `{}`
+
+- `browser_bookmarks` (table): Configuration for importing bookmarks from web browsers.
+  - **Default**: `{ enabled = false, ... }`
+
+- `deduplicate_bookmarks` (boolean): If `true`, duplicate bookmark URLs from all sources will be removed.
+  - **Default**: `true`
+
+- `cache_bookmarks` (boolean): If `true`, bookmarks loaded from files and browsers will be cached to improve performance.
+  - **Default**: `true`
+
+- `cache_duration` (number): The duration in seconds for which the bookmark cache is valid.
+  - **Default**: `60`
+
+- `plain_text` (table): Configuration for parsing plain text (`.txt`) bookmark files.
+  - `delimiters` (table): Characters used to separate a bookmark's name from its URL.
+  - `comment_chars` (table): Characters that signify the start of a comment line.
+  - **Default**: `{ delimiters = {":", "="}, comment_chars = {"#", ";"} }`
+
+- `icons` (table): Customize the icons used in the Telescope pickers.
+  - **Default**: `{ bookmark_alias = "->", ... }`
+
+- `persist_grouped_bookmarks_query` (boolean): If `true`, the search query is preserved when you navigate into a nested bookmark group.
+  - **Default**: `false`
+
+- `cache_pickers` (number): The number of Telescope pickers to cache, enabling back-navigation.
+  - **Default**: `10`
+
+- `sort_results` (boolean): If `true`, bookmark results are sorted alphabetically. If `false`, they are displayed in the order they were defined.
+  - **Default**: `true`
+
 ## Usage
 
-There are so many ways in which you can use this to improve your search experience. After `bookmarks` table support for multiple formats and organized structure of the bookmarks, you can just use `open_bookmarks()` api.
+The main entry point is the `require('browse').browse()` Lua function. This opens a Telescope window with the following options:
 
-### bookmarks
+- **Bookmarks Search**: Search through your configured bookmarks.
+- **Devdocs Search**: Search for queries on devdocs.io.
+- **Devdocs Search with filetype**: Search DevDocs, automatically using the current buffer's filetype as a filter.
+- **Input Search**: Enter a query to search with your default search provider.
+- **MDN Web Docs**: Search for queries on the MDN Web Docs.
 
-For bookmarks you can declare your bookmarks in lua table format. `bookmarks`
-table can contain multiple structures.
+Text selected in visual mode will be used as the initial query for searches.
 
-1. grouped urls with a name key in the table (recommended)
+### API
 
-   ```lua
-   local bookmarks = {
-     ["github"] = {
-         ["name"] = "search github from neovim",
-         ["code_search"] = "https://github.com/search?q=%s&type=code",
-         ["repo_search"] = "https://github.com/search?q=%s&type=repositories",
-         ["issues_search"] = "https://github.com/search?q=%s&type=issues",
-         ["pulls_search"] = "https://github.com/search?q=%s&type=pullrequests",
-     },
-   }
-   ```
+All public functions are available under the `require('browse')` module.
 
-2. urls with aliases
+- `browse.setup({opts})`: Configures the plugin. See [Configuration](#configuration).
 
-   ```lua
-   local bookmarks = {
-     ["github_code_search"] = "https://github.com/search?q=%s&type=code",
-     ["github_repo_search"] = "https://github.com/search?q=%s&type=repositories",
-   }
-   ```
+- `browse.browse({opts})`: Opens the main Telescope picker to select a search type. You can optionally pass a `bookmarks` table to this function to provide temporary bookmarks for this session only.
 
-3. urls with a query parameter
+- `browse.open_bookmarks({opts})`: Opens the Telescope picker directly to your bookmarks. You can optionally pass a `bookmarks` table here as well.
 
-   ```lua
-   local bookmarks = {
-     "https://github.com/search?q=%s&type=code",
-     "https://github.com/search?q=%s&type=repositories",
-   }
-   ```
+- `browse.input_search()`: Prompts for input and searches using the configured `provider`.
 
-4. simple and direct urls
+- `browse.devdocs.search()`: Prompts for input and searches on devdocs.io.
 
-   ```lua
-   local bookmarks = {
-        "https://github.com/hoob3rt/lualine.nvim",
-        "https://github.com/neovim/neovim",
-        "https://neovim.discourse.group/",
-        "https://github.com/nvim-telescope/telescope.nvim",
-        "https://github.com/rockerBOO/awesome-neovim",
-    }
-   ```
+- `browse.devdocs.search_with_filetype()`: Prompts for input and searches on devdocs.io, using the current buffer's filetype to narrow the search.
 
-5. you can also combine all of the above in a table if you want.
+- `browse.mdn.search()`: Prompts for input and searches on MDN Web Docs.
 
-and then pass this table into the `browse()` function like this
+### Commands
 
+The plugin does not create any commands by default. You can create them yourself for easier access.
+
+**Example:**
 ```lua
-vim.keymap.set("n", "<leader>b", function()
-  require("browse").browse({ bookmarks = bookmarks })
-end)
-```
-
-> If this `bookmarks` table will be empty or will not be passed and if you select `Bookmarks`
-> from `telescope` result, you will not see anything in the telescope results.
-
-### search
-
-- `input_search()`, it will prompt you to search for something
-
-```lua
-require('browse').input_search()
-```
-
-- `open_bookmarks()`, search with the table `bookmarks`
-
-```lua
-require("browse").open_bookmarks({ bookmarks = bookmarks })
-```
-
-- `browse()`, it opens `telescope.nvim` dropdown theme to select the method
-
-```lua
-require("browse").browse({ bookmarks = bookmarks })
-```
-
-### devdocs
-
-- `devdocs.search()`, search for anything in the [devdocs](https://devdocs.io/)
-
-```lua
-require('browse.devdocs').search()
-```
-
-- `devdocs.search_with_filetype()`, search for anything for the current file type
-
-```lua
-require('browse.devdocs').search_with_filetype()
-```
-
-### mdn
-
-- `mdn.search()`, search for anything on [MDN](https://developer.mozilla.org/en-US/)
-
-```lua
-require('browse.mdn').search()
-```
-
-## Customizations
-
-You can customize the `input_search()` to use the `provider` you like. Possible values for the provider are following:
-
-- `google`
-- `duckduckgo`
-- `brave`
-- `bing`
-
-## Advanced usage
-
-Create commands for all the functions which `browse.nvim` exposes and then simply run whatever you want from the
-command line
-
-```lua
-local browse = require('browse')
-
-function command(name, rhs, opts)
-  opts = opts or {}
-  vim.api.nvim_create_user_command(name, rhs, opts)
-end
-
-command("InputSearch", function()
-  browse.input_search()
+vim.api.nvim_create_user_command("Browse", function()
+    require("browse").browse()
 end, {})
 
--- this will open telescope using dropdown theme with all the available options
--- in which `browse.nvim` can be used
-command("Browse", function()
-  browse.browse({ bookmarks = bookmarks })
-end)
+vim.api.nvim_create_user_command("BrowseBookmarks", function()
+    require("browse").open_bookmarks()
+end, {})
 
-command("Bookmarks", function()
-  browse.open_bookmarks({ bookmarks = bookmarks })
-end)
+vim.api.nvim_create_user_command("BrowseSearch", function()
+    require("browse").input_search()
+end, {})
 
-command("DevdocsSearch", function()
-  browse.devdocs.search()
-end)
+vim.api.nvim_create_user_command("DevdocsSearch", function()
+    require("browse.devdocs").search()
+end, {})
 
-command("DevdocsFiletypeSearch", function()
-  browse.devdocs.search_with_filetype()
-end)
-
-command("MdnSearch", function()
-  browse.mdn.search()
-end)
+vim.api.nvim_create_user_command("MdnSearch", function()
+    require("browse.mdn").search()
+end, {})
 ```
+
+## Bookmarks
+
+`browse.nvim` can aggregate bookmarks from three sources: a Lua table, external files, and your web browser's bookmarks.
+
+### Lua Table
+
+You can define bookmarks directly in your `setup()` call or pass them to the `browse()` or `open_bookmarks()` functions. The table can have several formats:
+
+1.  **Simple list of URLs**:
+    ```lua
+    bookmarks = {
+        "https://neovim.io",
+        "https://github.com/nvim-telescope/telescope.nvim",
+    }
+    ```
+
+2.  **Aliases for URLs** (name = URL):
+    ```lua
+    bookmarks = {
+        neovim = "https://neovim.io",
+        telescope = "https://github.com/nvim-telescope/telescope.nvim",
+    }
+    ```
+    If the URL contains `%s`, it will be treated as a search query, and you will be prompted for input.
+    ```lua
+    bookmarks = {
+        gh_search = "https://github.com/search?q=%s",
+    }
+    ```
+
+3.  **Grouped bookmarks**:
+    You can create nested tables to group related bookmarks.
+    ```lua
+    bookmarks = {
+        neovim = {
+            name = "Neovim Resources", -- Optional display name for the group
+            website = "https://neovim.io",
+            discourse = "https://neovim.discourse.group/",
+        },
+    }
+    ```
+
+### External Files
+
+Use the `bookmark_files` option to specify a list of files to load bookmarks from. The following formats are supported:
+
+- `json`: Standard JSON format.
+- `yaml`: YAML format.
+- `toml`: TOML format.
+- `txt`: A plain text file where each line is a bookmark. The format can be `name: url` or just `url`. Use the `plain_text` config table to customize delimiters and comments.
+
+### Browser Bookmarks
+
+Set `browser_bookmarks.enabled = true` to import bookmarks from your installed web browsers.
+
+- `enabled` (boolean): Master switch to enable/disable this feature.
+- `browsers` (table): A table of booleans to control which browsers to import from (e.g., `{ chrome = true, firefox = false }`).
+- `auto_detect` (boolean): If `true`, the plugin will try to find installed browsers and enable them automatically if they are not explicitly set in the `browsers` table.
+- `group_by_folder` (boolean): If `true`, bookmarks will be nested in the picker according to the folder structure in your browser.
 
 ## Acknowledgements and Credits
 
