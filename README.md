@@ -13,10 +13,11 @@
 </div>
 
 `browse.nvim` is a plugin that provides a unified interface for browsing and
-searching web resources directly from within Neovim. It uses `telescope.nvim`
-to offer a powerful picker for accessing your bookmarks, searching with
-different providers (like Google, DuckDuckGo), and querying documentation
-sites like DevDocs and MDN.
+searching web resources directly from within Neovim. It uses a pluggable picker
+backend (telescope.nvim by default, with opt-in support for fzf-lua, mini.pick,
+and snacks.picker) to offer a powerful picker for accessing your bookmarks,
+searching with different providers (like Google, DuckDuckGo), and querying
+documentation sites like DevDocs and MDN.
 
 ## Showcase
 
@@ -41,6 +42,7 @@ sites like DevDocs and MDN.
 
 - Cross-platform support.
 - Reduces keystrokes for search queries.
+- Multi-picker backend support: telescope.nvim (default), fzf-lua, mini.pick, or snacks.picker.
 - [DevDocs](https://devdocs.io) integration.
 - [MDN](https://developer.mozilla.org/en-US/) Web Docs integration.
 - Powerful and flexible bookmarking system, with support for multiple files (JSON, YAML, TOML, TXT) and browser bookmark importing.
@@ -110,8 +112,21 @@ require('browse').setup({
     -- If `true`, the plugin will create default user commands for you.
     create_commands = true,
 
-    -- A table to configure the Telescope theme for each picker.
+    -- The picker backend used for the browse menu and bookmark picker.
+    -- Values: "telescope" (default), "fzf_lua", "mini_pick", "snacks".
+    picker = "telescope",
+
+    -- Per-backend passthrough opts, e.g. { fzf_lua = { winopts = {...} } }.
+    picker_opts = {},
+
+    -- A table to configure the layout for each picker.
+    layouts = {
+        browse = "dropdown",
+        manual_bookmarks = "dropdown",
+        browser_bookmarks = nil, -- nil uses the backend default layout
+    },
     themes = {
+        -- DEPRECATED: use `layouts` instead.
         browse = "dropdown",
         manual_bookmarks = "dropdown",
         browser_bookmarks = nil, -- nil uses the default Telescope theme
@@ -153,7 +168,7 @@ require('browse').setup({
 
 ## Usage
 
-The main entry point is the `require('browse').browse()` Lua function. This opens a Telescope window with the following options:
+The main entry point is the `require('browse').browse()` Lua function. This opens the configured picker with the following options:
 
 - **Manual Bookmarks**: Search through your bookmarks from your config and files.
 - **Browser Bookmarks**: Search through bookmarks imported from your web browsers.
@@ -191,11 +206,11 @@ All public functions are available under the `require('browse')` module.
 
 - `browse.setup({opts})`: Configures the plugin. See [Configuration](#configuration).
 
-- `browse.browse({opts})`: Opens the main Telescope picker to select a search type.
+- `browse.browse({opts})`: Opens the main picker to select a search type.
 
-- `browse.open_manual_bookmarks({opts})`: Opens the Telescope picker directly to your manual bookmarks (from config and files).
+- `browse.open_manual_bookmarks({opts})`: Opens the picker directly to your manual bookmarks (from config and files).
 
-- `browse.open_browser_bookmarks({opts})`: Opens the Telescope picker directly to your browser bookmarks.
+- `browse.open_browser_bookmarks({opts})`: Opens the picker directly to your browser bookmarks.
 
 - `browse.input_search()`: Prompts for input and searches using the configured `provider`.
 
