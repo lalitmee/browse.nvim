@@ -66,20 +66,44 @@ M.opts = {
         show_nested = true,
     },
 
+    -- Picker backend ("telescope" | "fzf_lua" | "mini_pick" | "snacks")
+    picker = "telescope",
+    -- Per-backend passthrough opts, e.g. { fzf_lua = { winopts = {...} } }
+    picker_opts = {},
+    -- Generic layouts shared across picker backends (replaces `themes`)
+    layouts = {
+        browse = "dropdown",
+        manual_bookmarks = "dropdown",
+        browser_bookmarks = nil, -- nil uses backend default layout
+    },
+
     -- Telescope options
     cache_pickers = 10,
     sort_results = true,
     create_commands = true,
-    themes = {
-        browse = "dropdown",
-        manual_bookmarks = "dropdown",
-        browser_bookmarks = nil, -- nil uses default telescope theme
-    },
+
+    -- DEPRECATED: use `layouts` instead. Kept for `themes` -> `layouts`
+    -- translation on setup when the user only set `themes`.
+    themes = nil,
 }
 
 function M.setup(opts)
     opts = opts or {}
+
+    local layouts_set = opts.layouts ~= nil
+    local themes_set = opts.themes ~= nil
+
     M.opts = vim.tbl_deep_extend("force", M.opts, opts)
+
+    -- DEPRECATED: translate legacy `themes` into generic `layouts`.
+    -- `layouts` wins when both are set.
+    if not layouts_set and themes_set then
+        vim.notify(
+            "browse.nvim: `themes` is deprecated, use `layouts` instead.",
+            vim.log.levels.WARN
+        )
+        M.opts.layouts = M.opts.themes
+    end
 
     -- Auto-detect browsers if enabled
     if
