@@ -229,6 +229,47 @@ M.select_entry_by_value = function(value)
     current_picker.picker_opts.attach_mappings(1, 1)
 end
 
+local picker_state = {
+    calls = {},
+}
+
+local function reset_picker_state()
+    picker_state.calls = {}
+end
+
+M.mock_picker = function()
+    reset_picker_state()
+    package.loaded["browse.picker"] = {
+        pick = function(entries, opts)
+            table.insert(picker_state.calls, {
+                entries = entries,
+                opts = opts,
+            })
+        end,
+    }
+    return package.loaded["browse.picker"]
+end
+
+M.get_picker_calls = function()
+    return picker_state.calls
+end
+
+M.simulate_select = function(value, query, nth)
+    nth = nth or #picker_state.calls
+    local call = picker_state.calls[nth]
+    assert(call, "no picker call #" .. nth)
+    call.opts.on_select(value, query)
+end
+
+M.simulate_cancel = function(nth)
+    nth = nth or #picker_state.calls
+    local call = picker_state.calls[nth]
+    assert(call, "no picker call #" .. nth)
+    if call.opts.on_cancel then
+        call.opts.on_cancel()
+    end
+end
+
 -- Mock telescope for testing
 M.mock_telescope = function()
     local telescope = {
