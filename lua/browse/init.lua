@@ -1,9 +1,4 @@
-local pickers = require("telescope.pickers")
-local finders = require("telescope.finders")
-local conf = require("telescope.config").values
-local actions = require("telescope.actions")
-local action_state = require("telescope.actions.state")
-local themes = require("telescope.themes")
+local picker = require("browse.picker")
 
 local search_bookmarks = require("browse.bookmarks").search_bookmarks
 local search_input = require("browse.input").search_input
@@ -13,68 +8,46 @@ local defaults = require("browse.config")
 
 local browse = function(config)
     config = config or {}
-    local utils = require("browse.utils")
+    local visual_text = config["visual_text"] or ""
 
-    local theme = utils.get_theme("browse")
-    local opts = vim.tbl_deep_extend("force", config, theme or {})
-
-    pickers
-        .new(opts, {
-            prompt_title = "Browse",
-
-            finder = finders.new_table({
-                results = {
-                    { "Manual Bookmarks", "manual_bookmarks" },
-                    { "Browser Bookmarks", "browser_bookmarks" },
-                    { "Devdocs Search", "devdocs" },
-                    { "Devdocs Search with filetype", "devdocs_file" },
-                    { "Input Search", "input" },
-                    { "MDN Web Docs", "mdn" },
-                },
-                entry_maker = function(entry)
-                    return {
-                        value = entry,
-                        display = entry[1],
-                        ordinal = entry[2],
-                    }
-                end,
-            }),
-
-            sorter = conf.generic_sorter(opts),
-
-            attach_mappings = function(prompt_bufnr, _)
-                actions.select_default:replace(function()
-                    actions.close(prompt_bufnr)
-
-                    local selection = action_state.get_selected_entry()
-                    local browse_selection = selection["ordinal"]
-
-                    if browse_selection == "manual_bookmarks" then
-                        search_bookmarks({
-                            source = "manual",
-                            visual_text = visual_text,
-                            cache_picker = { num_pickers = defaults.opts.cache_pickers },
-                        })
-                    elseif browse_selection == "browser_bookmarks" then
-                        search_bookmarks({
-                            source = "browser",
-                            visual_text = visual_text,
-                            cache_picker = { num_pickers = defaults.opts.cache_pickers },
-                        })
-                    elseif browse_selection == "input" then
-                        search_input(visual_text)
-                    elseif browse_selection == "devdocs" then
-                        devdocs.search(visual_text)
-                    elseif browse_selection == "devdocs_file" then
-                        devdocs.search_with_filetype(visual_text)
-                    elseif browse_selection == "mdn" then
-                        mdn.search(visual_text)
-                    end
-                end)
-                return true
+    picker.pick(
+        {
+            { value = "manual_bookmarks", display = "Manual Bookmarks", ordinal = "manual_bookmarks" },
+            { value = "browser_bookmarks", display = "Browser Bookmarks", ordinal = "browser_bookmarks" },
+            { value = "devdocs", display = "Devdocs Search", ordinal = "devdocs" },
+            { value = "devdocs_file", display = "Devdocs Search with filetype", ordinal = "devdocs_file" },
+            { value = "input", display = "Input Search", ordinal = "input" },
+            { value = "mdn", display = "MDN Web Docs", ordinal = "mdn" },
+        },
+        {
+            title = "Browse",
+            layout = defaults.opts.layouts.browse,
+            default_text = config.default_text,
+            on_select = function(value, _)
+                if value == "manual_bookmarks" then
+                    search_bookmarks({
+                        source = "manual",
+                        visual_text = visual_text,
+                        cache_picker = { num_pickers = defaults.opts.cache_pickers },
+                    })
+                elseif value == "browser_bookmarks" then
+                    search_bookmarks({
+                        source = "browser",
+                        visual_text = visual_text,
+                        cache_picker = { num_pickers = defaults.opts.cache_pickers },
+                    })
+                elseif value == "input" then
+                    search_input(visual_text)
+                elseif value == "devdocs" then
+                    devdocs.search(visual_text)
+                elseif value == "devdocs_file" then
+                    devdocs.search_with_filetype(visual_text)
+                elseif value == "mdn" then
+                    mdn.search(visual_text)
+                end
             end,
-        })
-        :find()
+        }
+    )
 end
 
 local M = {
