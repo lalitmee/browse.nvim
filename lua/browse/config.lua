@@ -99,7 +99,10 @@ function M.setup(opts)
     -- `layouts` wins when both are set.
     if not layouts_set and themes_set then
         vim.notify(
-            "browse.nvim: `themes` is deprecated, use `layouts` instead.",
+            "browse.nvim: `themes` is deprecated, use `layouts` instead. "
+                .. "See the README's 'Picker Backends -> Layouts and the deprecated "
+                .. "themes' section. Migration: rename `themes` to `layouts`. "
+                .. "See: https://github.com/lalitmee/browse.nvim#layouts-and-the-deprecated-themes",
             vim.log.levels.WARN
         )
         M.opts.layouts = M.opts.themes
