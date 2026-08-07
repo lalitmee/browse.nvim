@@ -117,42 +117,6 @@ M.get_domain = function(url)
     return string.match(url, "https?://([^/]+)")
 end
 
-function M.get_theme(picker_name)
-    local config = require("browse.config")
-    local themes = require("telescope.themes")
-
-    local theme_config = config.opts.themes and config.opts.themes[picker_name]
-
-    if not theme_config then
-        return {} -- Use default Telescope theme
-    end
-
-    local theme_name
-    local theme_opts = {}
-
-    if type(theme_config) == "string" then
-        theme_name = theme_config
-    elseif type(theme_config) == "table" then
-        theme_name = theme_config[1]
-        theme_opts = theme_config[2] or {}
-        if type(theme_name) ~= "string" or type(theme_opts) ~= "table" then
-            vim.notify("Browse.nvim: Invalid theme table format for " .. picker_name, vim.log.levels.WARN)
-            return {}
-        end
-    else
-        vim.notify("Browse.nvim: Invalid theme config for " .. picker_name, vim.log.levels.WARN)
-        return {}
-    end
-
-    local theme_func = themes["get_" .. theme_name]
-    if type(theme_func) ~= "function" then
-        vim.notify("Browse.nvim: Invalid theme name '" .. theme_name .. "' for " .. picker_name, vim.log.levels.WARN)
-        return {}
-    end
-
-    return theme_func(theme_opts)
-end
-
 function M.command_completer(arglead, cmdline, cursorpos)
     local subcommands = {
         "input",

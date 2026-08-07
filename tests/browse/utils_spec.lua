@@ -135,45 +135,4 @@ describe("browse.utils", function()
             assert.is_function(callback)
         end)
     end)
-
-    describe("get_theme", function()
-        before_each(function()
-            helpers.mock_telescope()
-        end)
-
-        local config = require("browse.config")
-
-        it("should return theme from string config", function()
-            config.opts.themes = { test_picker = "dropdown" }
-            local theme = utils.get_theme("test_picker")
-            assert.is_table(theme)
-            assert.is_not_nil(theme.results_title, "Expected a theme table, but got an empty one.")
-        end)
-
-        it("should return theme from table config", function()
-            config.opts.themes = { test_picker = { "dropdown", { height = 20 } } }
-            local themes = require("telescope.themes")
-
-            local original_get_dropdown = themes.get_dropdown
-            local opts_received
-            themes.get_dropdown = function(opts)
-                opts_received = opts
-                return original_get_dropdown(opts)
-            end
-
-            utils.get_theme("test_picker")
-
-            assert.is_table(opts_received)
-            assert.equals(20, opts_received.height)
-
-            themes.get_dropdown = original_get_dropdown -- Restore
-        end)
-
-        it("should return empty table for nil config", function()
-            config.opts.themes = { test_picker = nil }
-            local theme = utils.get_theme("test_picker")
-            assert.is_table(theme)
-            assert.is_true(vim.tbl_isempty(theme), "Expected an empty table for nil theme config.")
-        end)
-    end)
 end)
