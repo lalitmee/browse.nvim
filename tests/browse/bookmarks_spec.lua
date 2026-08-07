@@ -1,6 +1,6 @@
 local helpers = require("helpers")
 helpers.setup_mocks()
-helpers.mock_telescope()
+helpers.mock_picker()
 
 local bookmarks_module = require("browse.bookmarks")
 
