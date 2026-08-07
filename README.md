@@ -83,83 +83,8 @@ To use a different picker backend, add it as a dependency and set `picker` in yo
       opts = {
           picker = "fzf_lua", -- telescope (default), fzf_lua, mini_pick, snacks
       },
-  }
+}
   ```
-
-## Picker Backends
-
-The `:Browse` menu, the bookmark picker, and nested-group navigation all run through a
-single facade that abstracts over the picker widget. You get the same behavior and
-configuration on every backend.
-
-| Backend | `picker` value | Extra requirement | Supported layouts |
-| --- | --- | --- | --- |
-| [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) | `telescope` | nothing | `default`, `dropdown`, `cursor`, `ivy` |
-| [fzf-lua](https://github.com/ibhagwan/fzf-lua) | `fzf_lua` | the `fzf` or `sk` binary on `PATH` | `default`, `dropdown`, `cursor`, `ivy` |
-| [mini.pick](https://github.com/echasnovski/mini.pick) | `mini_pick` | nothing | `default`, `dropdown`, `cursor`, `ivy` |
-| [snacks.nvim](https://github.com/folke/snacks.nvim) | `snacks` | nothing | `default`, `dropdown`, `cursor`, `ivy`, `top`, `vertical` |
-
-### Fallback behavior
-
-- If the configured backend is not installed, or fails the extra requirement (e.g. the
-  `fzf` binary is missing), the plugin warns once and falls back to telescope.nvim.
-- If the selected backend errors at runtime, the plugin reports the error and opens
-  telescope.nvim instead.
-
-So a broken or missing backend never leaves you staring at an empty buffer.
-
-### Per-backend options: `picker_opts`
-
-`picker_opts` is a passthrough table of options forwarded to each backend. Options given
-at the call site (e.g. the `opts` passed to `browse()`) take precedence over these.
-
-Backend specifics:
-
-- **telescope**: options are merged into the telescope picker configuration.
-- **fzf-lua**: accepts `winopts` (and any option `fzf_exec` understands), e.g.
-  `{ winopts = { preview = true } }`.
-- **mini.pick**: accepts `window`, e.g. `{ window = { border = "single" } }`.
-- **snacks**: options are merged into the `snacks.picker.pick` spec.
-
-```lua
-require('browse').setup({
-    picker = "fzf_lua",
-    picker_opts = {
-        fzf_lua = {
-            winopts = { preview = true },
-        },
-    },
-})
-```
-
-### Layouts and the deprecated `themes`
-
-Layouts control where and how each picker appears, and are backend-independent. Setting
-`layouts = { browse = "ivy", manual_bookmarks = "ivy" }` gives you an ivy-ish layout on
-every backend that supports it (see the table above for which layouts each backend
-accepts; the backend falls back to its default for unsupported names).
-
-```lua
-require('browse').setup({
-    layouts = {
-        browse = "dropdown",
-        manual_bookmarks = "dropdown",
-        browser_bookmarks = nil, -- nil = backend default layout
-    },
-})
-```
-
-**`themes` is deprecated.** Migrate by renaming `themes` to `layouts` — the keys and
-values are identical. While `themes` still works as a fallback (and is translated for
-you), setting only `themes` triggers a one-time deprecation warning at setup, and if
-both are present, `layouts` wins.
-
-```diff
- require('browse').setup({
--    themes = { browse = "dropdown", manual_bookmarks = "dropdown" },
-+    layouts = { browse = "dropdown", manual_bookmarks = "dropdown" },
- })
-```
 
 ## Configuration
 
@@ -251,6 +176,81 @@ require('browse').setup({
     -- If `false`, they are displayed in the order they were defined.
     sort_results = true,
 })
+```
+
+## Picker Backends
+
+The `:Browse` menu, the bookmark picker, and nested-group navigation all run through a
+single facade that abstracts over the picker widget. You get the same behavior and
+configuration on every backend.
+
+| Backend | `picker` value | Extra requirement | Supported layouts |
+| --- | --- | --- | --- |
+| [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) | `telescope` | nothing | `default`, `dropdown`, `cursor`, `ivy` |
+| [fzf-lua](https://github.com/ibhagwan/fzf-lua) | `fzf_lua` | the `fzf` or `sk` binary on `PATH` | `default`, `dropdown`, `cursor`, `ivy` |
+| [mini.pick](https://github.com/echasnovski/mini.pick) | `mini_pick` | nothing | `default`, `dropdown`, `cursor`, `ivy` |
+| [snacks.nvim](https://github.com/folke/snacks.nvim) | `snacks` | nothing | `default`, `dropdown`, `cursor`, `ivy`, `top`, `vertical` |
+
+### Fallback behavior
+
+- If the configured backend is not installed, or fails the extra requirement (e.g. the
+  `fzf` binary is missing), the plugin warns once and falls back to telescope.nvim.
+- If the selected backend errors at runtime, the plugin reports the error and opens
+  telescope.nvim instead.
+
+So a broken or missing backend never leaves you staring at an empty buffer.
+
+### Per-backend options: `picker_opts`
+
+`picker_opts` is a passthrough table of options forwarded to each backend. Options given
+at the call site (e.g. the `opts` passed to `browse()`) take precedence over these.
+
+Backend specifics:
+
+- **telescope**: options are merged into the telescope picker configuration.
+- **fzf-lua**: accepts `winopts` (and any option `fzf_exec` understands), e.g.
+  `{ winopts = { preview = true } }`.
+- **mini.pick**: accepts `window`, e.g. `{ window = { border = "single" } }`.
+- **snacks**: options are merged into the `snacks.picker.pick` spec.
+
+```lua
+require('browse').setup({
+    picker = "fzf_lua",
+    picker_opts = {
+        fzf_lua = {
+            winopts = { preview = true },
+        },
+    },
+})
+```
+
+### Layouts and the deprecated `themes`
+
+Layouts control where and how each picker appears, and are backend-independent. Setting
+`layouts = { browse = "ivy", manual_bookmarks = "ivy" }` gives you an ivy-ish layout on
+every backend that supports it (see the table above for which layouts each backend
+accepts; the backend falls back to its default for all unsupported names).
+
+```lua
+require('browse').setup({
+    layouts = {
+        browse = "dropdown",
+        manual_bookmarks = "dropdown",
+        browser_bookmarks = nil, -- nil = backend default layout
+    },
+})
+```
+
+**`themes` is deprecated.** Migrate by renaming `themes` to `layouts` — the keys and
+values are identical. While `themes` still works as a fallback (and is translated for
+you), setting only `themes` triggers a one-time deprecation warning at setup, and if
+both are present, `layouts` wins.
+
+```diff
+ require('browse').setup({
+-    themes = { browse = "dropdown", manual_bookmarks = "dropdown" },
++    layouts = { browse = "dropdown", manual_bookmarks = "dropdown" },
+ })
 ```
 
 ## Usage
