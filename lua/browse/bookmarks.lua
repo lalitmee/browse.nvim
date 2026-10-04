@@ -94,8 +94,7 @@ local function build_entry(entry, max_len, icons)
         if type(name) ~= "string" then
             name = ""
         end
-        local formatted_name =
-            string.format("%-" .. max_len .. "s", name)
+        local formatted_name = name .. string.rep(" ", max_len - #name)
         value = entry[2]
 
         if type(value) == "table" and value.url then -- It's a browser bookmark
@@ -120,8 +119,7 @@ local function build_entry(entry, max_len, icons)
         if type(name) ~= "string" then
             name = ""
         end
-        local formatted_name =
-            string.format("%-" .. max_len .. "s", name)
+        local formatted_name = name .. string.rep(" ", max_len - #name)
         local group_table = entry[2]
         local count = count_items(group_table)
         local group_name = group_table.name or entry[1] -- Use inner name or fall back to key
